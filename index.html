@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UGICT22J301 — Java OOP Study Companion</title>
+  <script src="https://cjrtnc.leaningtech.com/3.0/cj3loader.js"></script>
+  <style>
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #0f172a; overflow: hidden; }
+    #loader { color: #f8fafc; font-family: sans-serif; text-align: center; padding-top: 40vh; }
+  </style>
+</head>
+<body>
+  <div id="loader">Loading UGICT22J301 Java Study Companion...</div>
+  <script>
+    (async function () {
+      await cheerpjInit();
+      document.getElementById("loader").style.display = "none";
+      cheerpjCreateDisplay(-1, -1);
+      const basePath = window.location.pathname.replace(/\/[^\/]*$/, "/");
+      await cheerpjRunJar("/app" + basePath + "JavaCourseCompanion.jar");
+    })();
+  </script>
+</body>
+</html>
