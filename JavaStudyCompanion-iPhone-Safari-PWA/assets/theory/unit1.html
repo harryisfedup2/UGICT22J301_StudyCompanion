@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unit 1 · Java Fundamentals</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1020;--panel:#151d32;--panel2:#1c2942;--line:#2b3a57;--text:#f3f6ff;--muted:#c1cbe0;--accent:#9bb2ff;--green:#8be0b0;--gold:#ffd18b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.68 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:920px;margin:auto;padding:22px 19px 54px}h1{font-size:clamp(29px,7vw,42px);line-height:1.15;margin:9px 0 12px}h2{font-size:25px;line-height:1.25;margin:38px 0 12px;color:var(--accent)}h3{font-size:19px;margin:24px 0 7px;color:#dbe4ff}p{margin:9px 0;color:var(--muted)}li{margin:6px 0;color:var(--muted)}strong{color:#fff}a{color:#a9c1ff}.tag{color:var(--accent);font-size:12px;font-weight:800;letter-spacing:.12em}.lead,.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:12px 0}.lead{border-left:4px solid var(--accent)}.callout{border-left:4px solid var(--gold);background:#251f1a;padding:12px 15px;border-radius:9px;margin:14px 0;color:#f0dfc4}.success{border-left-color:var(--green);background:#10251f}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}.grid .card{margin:0}.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:12px 0}table{border-collapse:collapse;width:100%;min-width:570px;background:var(--panel);font-size:14px}th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}th{color:var(--accent);background:var(--panel2)}td{color:var(--muted)}code{color:#b8f0cb;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}pre{overflow-x:auto;background:#080d18;border:1px solid var(--line);border-radius:12px;padding:15px;color:#e4ecff;font:13px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre}.line{color:#97a8c7}details{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:9px 0;padding:11px 14px}summary{cursor:pointer;color:#eef2ff;font-weight:700}details p{margin:8px 2px 1px}.toc a{display:inline-block;margin:4px 8px 4px 0;padding:5px 9px;border:1px solid var(--line);border-radius:20px;text-decoration:none;font-size:13px}.small{font-size:13px}.history{border-left:2px solid var(--line);padding-left:17px}.history p{position:relative}.history p:before{content:"";position:absolute;left:-23px;top:10px;width:9px;height:9px;border-radius:50%;background:var(--accent)}@media(max-width:520px){main{padding:17px 14px 42px}body{font-size:15px}pre{font-size:12px;padding:12px}}
+</style></head><body><main>
+<div class="tag">UGICT22J301 · UNDERSTANDING OOPs THROUGH JAVA · 15 HOURS</div>
+<h1>Unit 1: Java Fundamentals</h1>
+<p class="lead">This unit builds the foundation for reading and writing Java: what the language and JVM do, why object-oriented ideas are useful, how Java stores values, and how operators form expressions. Think of the compiler as a translator that prepares a common set of instructions, while a JVM is the machine-specific interpreter and optimiser that carries them out.</p>
+<nav class="toc"><a href="#story">Story</a><a href="#java">Java &amp; Internet</a><a href="#oop">OOP</a><a href="#types">Types &amp; variables</a><a href="#operators">Operators</a><a href="#errors">Errors</a><a href="#viva">40 viva answers</a></nav>
+
+<h2 id="story">The story behind Java and the JVM</h2>
+<div class="history">
+<p><strong>1991 — Green Project.</strong> Sun Microsystems began exploring software for small consumer-electronic devices. James Gosling and colleagues designed a language first called <em>Oak</em>, with predictable behavior across different processors and devices as a major goal.</p>
+<p><strong>1990s — a change of destination.</strong> The consumer-device market did not develop as the team expected. As the public Internet and web browsers grew, the language was retargeted for networked software and renamed Java. The name change was practical as well as legal: Oak was already in use.</p>
+<p><strong>1995–1996 — public release.</strong> Sun announced Java in 1995; Java 1.0 shipped in 1996. Its promise was “write once, run anywhere” where a compatible Java runtime exists. Java source was compiled to bytecode, then a JVM implemented that bytecode on a particular operating system and processor.</p>
+<p><strong>1998–2017 — platform grows.</strong> Java 2 brought major libraries and platform editions; Java 5 (2004) added language features including generics and enhanced for-loops; Java 8 (2014) added lambdas and related functional APIs; Java 9 (2017) introduced the module system. Each change had to balance new capabilities with compatibility for existing programs.</p>
+</div>
+<p>The JVM is not merely a “Java interpreter.” The Java Virtual Machine Specification defines a class-file format and execution model. A JVM may interpret bytecode, compile frequently used code to native instructions just in time (JIT), or combine techniques. The Java compiler (<code>javac</code>) turns source into class files; it does not normally compile directly to one processor’s machine code.</p>
+
+<h2 id="java">Java, the Internet, and C/C++</h2>
+<h3>Language, platform, and Internet</h3>
+<p><strong>Java the language</strong> defines source-code rules and meaning. <strong>The Java platform</strong> adds the JVM, standard libraries, development tools, and runtime services. The Internet is the global network of interconnected networks; the Web is one service on it, using protocols such as HTTP. Java can create network software, but Java is not the Internet and does not require a browser.</p>
+<p>A normal build-and-run path is: <code>Unit1Example.java → javac → Unit1Example.class (bytecode) → JVM → program behavior</code>. A class file is portable only when the destination has a compatible JVM, libraries, and required permissions. Native libraries, operating-system assumptions, and version differences can still reduce portability.</p>
+<h3>Frequently taught design features</h3>
+<div class="grid">
+<div class="card"><strong>Object-oriented</strong><p>Programs can model related state and behavior with classes and objects. Java is not “pure OOP”: primitive values such as <code>int</code> are not objects.</p></div>
+<div class="card"><strong>Portable and architecture-neutral</strong><p>Bytecode and specified primitive sizes avoid compiling every ordinary Java class for one CPU. A compatible runtime is still required.</p></div>
+<div class="card"><strong>Robust</strong><p>Static type checks, array bounds checks, exceptions, and managed memory catch or reduce many classes of error. They do not make every program correct.</p></div>
+<div class="card"><strong>Managed memory</strong><p>The garbage collector can reclaim unreachable objects. Programmers still close files, sockets, database connections, and other scarce resources.</p></div>
+<div class="card"><strong>Concurrent</strong><p>Java has a thread model and synchronization rules for tasks that overlap. Concurrency introduces race conditions and needs careful design.</p></div>
+<div class="card"><strong>Rich libraries</strong><p>Collections, I/O, networking, text, time, security, and database APIs let programs reuse tested building blocks.</p></div>
+</div>
+<h3>Java compared with C and C++</h3>
+<div class="tablewrap"><table><thead><tr><th>Topic</th><th>C</th><th>C++</th><th>Java</th></tr></thead><tbody>
+<tr><td>Typical compilation</td><td>Source is compiled to native code for a target platform.</td><td>Source is compiled to native code for a target platform.</td><td>Source is normally compiled to JVM class files, then run by a compatible JVM.</td></tr>
+<tr><td>Memory</td><td>Manual allocation patterns and explicit deallocation are common.</td><td>Manual management and deterministic RAII/resource patterns are common.</td><td>Objects are garbage-collected when unreachable; external resources still need explicit closing.</td></tr>
+<tr><td>Pointer access</td><td>Pointer arithmetic is part of the language.</td><td>Pointer arithmetic is available.</td><td>References are used; ordinary Java source has no pointer arithmetic.</td></tr>
+<tr><td>Object model</td><td>Procedural language; structs can group data.</td><td>Classes, templates, operator overloading, and multiple inheritance of classes are supported.</td><td>Class-based OOP; one direct superclass per class, with multiple interfaces.</td></tr>
+<tr><td>Preprocessing</td><td>Uses a preprocessor for directives and macros.</td><td>Uses a preprocessor and header-based conventions.</td><td>No C-style macro preprocessor or header files; declarations and imports are handled by Java syntax and build tools.</td></tr>
+<tr><td>Where seen</td><td>Operating systems, embedded code, and native libraries.</td><td>Games, desktop software, engines, and performance-sensitive systems.</td><td>Server systems, business applications, educational tools, and Android code written against Android APIs.</td></tr>
+</tbody></table></div>
+<p class="callout"><strong>Fair comparison:</strong> none of these languages is automatically “faster,” “safer,” or “better” for every task. Results depend on the runtime, libraries, problem, and engineering practices.</p>
+
+<h2 id="oop">Object-oriented programming: four core ideas</h2>
+<p>OOP organizes a program around objects: individual entities that have identity, state (data), and behavior (operations). A <strong>class</strong> defines a kind of object; an <strong>object</strong> is one instance created from that class.</p>
+<div class="grid">
+<div class="card"><strong>Encapsulation</strong><p>Keep an object’s internal state behind a clear public interface. A bank account protects its balance: customers request a deposit or withdrawal instead of changing the ledger cell directly. In Java, access modifiers such as <code>private</code> and methods enforce that boundary.</p></div>
+<div class="card"><strong>Abstraction</strong><p>Expose the operations a user needs while hiding unnecessary implementation details. A student can call <code>withdraw</code> without knowing how a bank stores transaction records. In Java, methods, interfaces, and abstract classes define useful contracts.</p></div>
+<div class="card"><strong>Inheritance</strong><p>A specialized class reuses and extends behavior from a more general class. A campus vehicle can inherit common registration details from <code>Vehicle</code>, then add bus-specific capacity. Use inheritance for a genuine “is-a” relationship; composition is often better for “has-a.”</p></div>
+<div class="card"><strong>Polymorphism</strong><p>One common operation can lead to different behavior depending on the actual object. A campus map can call <code>arrive()</code> on a Bus or Bicycle object and each can describe its own arrival. Overridden instance methods are selected at runtime by the object’s class.</p></div>
+</div>
+<h3>Complete example: encapsulated account</h3>
+<pre><code>class BankAccount {
+    private final String owner;
+    private int balance;
+
+    BankAccount(String owner, int openingBalance) {
+        this.owner = owner;
+        this.balance = openingBalance;
+    }
+
+    public void deposit(int amount) {
+        if (amount &gt; 0) balance += amount;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public static void main(String[] args) {
+        BankAccount account = new BankAccount("Asha", 500);
+        account.deposit(150);
+        System.out.println(account.owner + " has " + account.getBalance());
+    }
+}</code></pre>
+<p><strong>Line by line:</strong> <code>class BankAccount</code> declares a reusable type. <code>private final String owner</code> stores an owner that is chosen at construction and cannot later be reassigned; <code>private int balance</code> hides mutable state. The constructor accepts initial values, and <code>this.owner</code> means “the field belonging to this new object,” distinguishing it from the parameter with the same name. <code>deposit</code> checks a basic business rule before changing the field. <code>getBalance</code> offers controlled read access. <code>main</code> creates one instance, calls its behavior, and prints the result.</p>
+<p><strong>Expected output:</strong> <code>Asha has 650</code>. This small example does not implement currency rounding, persistence, concurrency control, or a complete banking policy; it demonstrates object state and encapsulation.</p>
+
+<h2 id="types">Primitive types, variables, conversions, and Unicode</h2>
+<h3>The eight primitive types</h3>
+<div class="tablewrap"><table><thead><tr><th>Group</th><th>Type</th><th>Storage / range idea</th><th>Example</th></tr></thead><tbody>
+<tr><td>Integer</td><td><code>byte</code></td><td>8-bit signed, −128 to 127</td><td><code>byte level = 7;</code></td></tr>
+<tr><td>Integer</td><td><code>short</code></td><td>16-bit signed</td><td><code>short year = 2026;</code></td></tr>
+<tr><td>Integer</td><td><code>int</code></td><td>32-bit signed; common whole-number type</td><td><code>int seats = 42;</code></td></tr>
+<tr><td>Integer</td><td><code>long</code></td><td>64-bit signed</td><td><code>long population = 8_000_000_000L;</code></td></tr>
+<tr><td>Floating point</td><td><code>float</code></td><td>32-bit IEEE 754 binary floating-point; about 6–7 decimal digits</td><td><code>float ratio = 0.5f;</code></td></tr>
+<tr><td>Floating point</td><td><code>double</code></td><td>64-bit IEEE 754 binary floating-point; about 15–16 decimal digits</td><td><code>double pi = 3.14159;</code></td></tr>
+<tr><td>Character</td><td><code>char</code></td><td>16-bit UTF-16 code unit, not necessarily a full Unicode character</td><td><code>char grade = 'A';</code></td></tr>
+<tr><td>Logical</td><td><code>boolean</code></td><td>Only <code>true</code> or <code>false</code>; JVM storage is implementation-specific</td><td><code>boolean ready = true;</code></td></tr>
+</tbody></table></div>
+<p>Every other Java type is a reference type: class types (including <code>String</code>), interfaces, arrays, and enum types. A reference can point to an object or be <code>null</code>; a primitive variable holds a primitive value. Fields and array elements receive default values, but local variables must be definitely assigned before use.</p>
+<h3>Variables and initialization</h3>
+<p>A variable is a named storage location with a declared type. A <strong>declaration</strong> introduces its name and type; an <strong>initialization</strong> supplies its first value; an <strong>assignment</strong> later stores a value. A local variable has block scope, an instance field belongs to each object, and a static field belongs to the class itself.</p>
+<pre><code>int attempts;             // declaration
+attempts = 1;             // assignment; first assignment initializes this local
+final double tax = 0.18;  // initialized once; cannot be reassigned
+static int studentCount;  // one class-level field, defaults to 0</code></pre>
+<h3>Widening and narrowing conversions</h3>
+<p>A <strong>widening primitive conversion</strong> generally moves to a type with a larger range, such as <code>int</code> to <code>long</code>; it can be implicit, though floating-point precision may still change. A <strong>narrowing conversion</strong>, such as <code>double</code> to <code>int</code>, needs a cast because fractional information or range can be lost. Casting does not validate a value.</p>
+<pre><code>int count = 12;
+double exactAsBinaryFloat = count; // widening
+double price = 19.95;
+int whole = (int) price;           // narrowing: becomes 19, fractional part is discarded</code></pre>
+<h3>Unicode and Java characters</h3>
+<p>Java source text uses Unicode. A <code>char</code> stores one UTF-16 code unit. Many familiar characters fit in one code unit, but some Unicode symbols are represented by a <em>surrogate pair</em>, so one visible symbol can use two <code>char</code> values. For general text processing, use code-point-aware methods such as <code>String.codePoints()</code> when a task means Unicode code points rather than UTF-16 units. A Java Unicode escape such as <code>'\u20B9'</code> can denote the rupee sign; Unicode escapes are processed before ordinary tokenization, which can surprise readers in unusual cases.</p>
+
+<h2 id="operators">Operators and precedence</h2>
+<div class="tablewrap"><table><thead><tr><th>Family</th><th>Operators</th><th>Use and caution</th></tr></thead><tbody>
+<tr><td>Arithmetic</td><td><code>+ - * / %</code></td><td>Integer division truncates toward zero: <code>7 / 2</code> is <code>3</code>. <code>%</code> gives the remainder. Integer division by zero throws <code>ArithmeticException</code>.</td></tr>
+<tr><td>Assignment</td><td><code>= += -= *= /= %=</code></td><td>Stores or updates a value. Compound assignment includes an implicit cast to the left-hand type.</td></tr>
+<tr><td>Relational / equality</td><td><code>&lt; &lt;= &gt; &gt;= == !=</code></td><td>Produce a boolean. For object content, use methods such as <code>equals</code>; <code>==</code> compares references.</td></tr>
+<tr><td>Logical</td><td><code>&amp;&amp; || !</code></td><td>Operate on booleans. <code>&amp;&amp;</code> and <code>||</code> short-circuit, so the right side may not run.</td></tr>
+<tr><td>Bitwise / shifts</td><td><code>&amp; | ^ ~ &lt;&lt; &gt;&gt; &gt;&gt;&gt;</code></td><td>Operate on integral bits; <code>&amp;</code> and <code>|</code> also work on booleans without short-circuiting.</td></tr>
+<tr><td>Conditional</td><td><code>condition ? a : b</code></td><td>Chooses one of two expressions. Keep nested conditionals readable.</td></tr>
+<tr><td>Increment / decrement</td><td><code>++ --</code></td><td>Prefix changes then yields a value; postfix yields then changes. Avoid hiding side effects inside complex expressions.</td></tr>
+</tbody></table></div>
+<p>Precedence determines how an unparenthesized expression groups; multiplication is evaluated before addition, comparisons before <code>&amp;&amp;</code>, and assignment is low precedence. Associativity determines grouping when operators share a precedence. Parentheses make intent clearer and prevent subtle mistakes.</p>
+<h3>Complete operator and Unicode example</h3>
+<pre><code>class Unit1Values {
+    public static void main(String[] args) {
+        int credits = 15;
+        double fee = 1250.50;
+        char rupee = '\u20B9';
+        boolean eligible = credits &gt;= 12 &amp;&amp; fee &gt; 0;
+        int wholeFee = (int) fee;
+        int flags = 0b0101;
+        int shifted = flags &lt;&lt; 1;
+        System.out.println("Eligible: " + eligible);
+        System.out.println("Fee: " + rupee + wholeFee);
+        System.out.println("Shift: " + shifted);
+    }
+}</code></pre>
+<p><strong>Line by line:</strong> <code>credits</code> is an integer and <code>fee</code> a double. <code>rupee</code> stores the single UTF-16 unit U+20B9. The comparison operators produce booleans and <code>&amp;&amp;</code> combines the conditions with short-circuit logic. The cast intentionally discards the fractional part. <code>0b0101</code> is a binary integer literal; shifting it left one place doubles its bit pattern to decimal 10. The print statements join text and values into readable output.</p>
+<p><strong>Expected output:</strong><br><code>Eligible: true</code><br><code>Fee: ₹1250</code><br><code>Shift: 10</code></p>
+
+<h2 id="errors">Common errors, comparisons, and applications</h2>
+<ul><li>Using <code>=</code> when testing equality; use <code>==</code> for primitive equality and <code>equals</code> for object content.</li><li>Assuming <code>7 / 2</code> is <code>3.5</code>; integer operands produce integer division. Write <code>7.0 / 2</code> for floating-point division.</li><li>Forgetting the <code>f</code> suffix on a float literal or <code>L</code> on a large long literal.</li><li>Expecting a local variable to receive a default value; initialize it before reading.</li><li>Assuming garbage collection closes a file or database connection. Close those resources explicitly, preferably with try-with-resources.</li><li>Assuming “portable” means every Java program behaves identically on every device. The runtime, APIs, locale, file system, permissions, and native dependencies matter.</li><li>Using <code>char</code> or <code>String.length()</code> as a count of user-perceived symbols; UTF-16 code units, code points, and grapheme clusters are different counts.</li></ul>
+<p>Java fundamentals are used in desktop and server software, Android applications (with Android-specific APIs and runtime), backend services, data-processing tools, and education. The OOP model is especially useful when a domain has entities with rules and state; procedural or functional styles can be clearer for other problems.</p>
+
+<h2 id="viva">Viva practice · 40 answered questions</h2>
+<details><summary>1. What is Java?</summary><p>Java is a general-purpose, statically typed, class-based programming language and a platform ecosystem. Compiled class files execute on a compatible Java virtual machine.</p></details>
+<details><summary>2. Who designed Java?</summary><p>James Gosling led the original language work at Sun Microsystems, with important contributions from a larger team. The original project name was Oak.</p></details>
+<details><summary>3. What was the Green Project?</summary><p>It was an early Sun Microsystems effort exploring software for consumer electronic devices. Its language work later became Java.</p></details>
+<details><summary>4. Why did Oak become Java?</summary><p>The project shifted from its original embedded-device target toward networked software, especially the growing Internet. Oak also could not be used as the product name, so it was renamed Java.</p></details>
+<details><summary>5. What is bytecode?</summary><p>Bytecode is the instruction set stored in Java class files. It is designed for a virtual machine, rather than one particular processor's native instruction set.</p></details>
+<details><summary>6. What does the JVM do?</summary><p>The JVM loads and verifies class files, manages runtime execution and memory, and may interpret or JIT-compile bytecode. Its specification defines behavior expected of implementations.</p></details>
+<details><summary>7. What is the difference between JDK, JRE, and JVM?</summary><p>The JVM executes class files. A runtime environment supplies the JVM and libraries needed to run programs; a JDK adds developer tools such as compilers. Packaging has changed across Java distributions, but the roles remain useful concepts.</p></details>
+<details><summary>8. What does “write once, run anywhere” mean?</summary><p>It means compatible bytecode can run on different systems that provide a suitable JVM and required libraries. It is a portability goal, not a promise that environment-dependent code will always behave identically.</p></details>
+<details><summary>9. Is Java interpreted or compiled?</summary><p>Java source is compiled to bytecode. A JVM may interpret bytecode, compile hot methods to native code, or use both approaches.</p></details>
+<details><summary>10. What is the Internet?</summary><p>It is a global network of interconnected networks that communicate using standard protocols. The World Wide Web is one service carried over the Internet.</p></details>
+<details><summary>11. Is Java a pure object-oriented language?</summary><p>No. Java supports object-oriented programming, but its eight primitive types are not objects, and static methods can be used without an object instance.</p></details>
+<details><summary>12. Name four OOP principles.</summary><p>Encapsulation, abstraction, inheritance, and polymorphism. They describe complementary ways to organize state, contracts, reuse, and behavior.</p></details>
+<details><summary>13. Define encapsulation.</summary><p>Encapsulation keeps data and the operations that control it together, while limiting direct access to internal state. A class can reject invalid changes through its public methods.</p></details>
+<details><summary>14. Define abstraction.</summary><p>Abstraction presents the essential operations of a component while hiding implementation details that callers do not need. Interfaces and abstract classes can express such contracts.</p></details>
+<details><summary>15. Define inheritance.</summary><p>Inheritance creates a subclass from a superclass so it can reuse and specialize accessible behavior. It models an “is-a” relationship and should not replace composition when the relationship is “has-a.”</p></details>
+<details><summary>16. Define polymorphism.</summary><p>Polymorphism lets a common reference or method call work with different object types. Overridden instance methods are selected based on the object's runtime class.</p></details>
+<details><summary>17. What is a class?</summary><p>A class is a declaration that defines a type's members, such as fields, constructors, and methods. Objects are created as instances of classes.</p></details>
+<details><summary>18. What is an object?</summary><p>An object is a runtime instance with identity, state, and behavior. Multiple objects of the same class can hold different field values.</p></details>
+<details><summary>19. How does Java differ from C in memory management?</summary><p>Java automatically reclaims unreachable heap objects through garbage collection. C commonly gives programmers direct allocation and deallocation control; both approaches still require careful resource handling.</p></details>
+<details><summary>20. Does Java support pointer arithmetic?</summary><p>No ordinary Java source code cannot perform pointer arithmetic. It uses typed references to objects, with access checked by the language and runtime.</p></details>
+<details><summary>21. How does Java differ from C++ inheritance?</summary><p>A Java class has one direct superclass but can implement multiple interfaces. C++ allows a class to inherit from multiple classes.</p></details>
+<details><summary>22. What is a primitive type?</summary><p>A primitive type represents a simple value directly, such as an integer, floating-point number, character code unit, or boolean. Java defines eight primitives.</p></details>
+<details><summary>23. List Java's integer types.</summary><p><code>byte</code>, <code>short</code>, <code>int</code>, and <code>long</code>. They are signed integer types with widths of 8, 16, 32, and 64 bits respectively.</p></details>
+<details><summary>24. What is the default type of a decimal literal?</summary><p>A decimal floating-point literal such as <code>2.5</code> has type <code>double</code>. Add <code>f</code> or <code>F</code> to write a float literal.</p></details>
+<details><summary>25. What does a Java char store?</summary><p>A <code>char</code> stores one 16-bit UTF-16 code unit. Some Unicode code points need two char values, so char is not always a whole visible character.</p></details>
+<details><summary>26. What values can boolean hold?</summary><p>Only <code>true</code> and <code>false</code>. Java does not implicitly convert numeric values to booleans.</p></details>
+<details><summary>27. What is a variable?</summary><p>A variable is a named, typed storage location used to hold a value. Its scope and lifetime depend on whether it is local, an instance field, or a static field.</p></details>
+<details><summary>28. What is initialization?</summary><p>Initialization gives a variable its initial value. A local variable must be definitely assigned on every path before it is read.</p></details>
+<details><summary>29. What is a widening conversion?</summary><p>It converts a value to a type that can generally represent a wider range, such as <code>int</code> to <code>long</code>. Some conversions can still lose precision, particularly integer-to-floating-point conversions of large values.</p></details>
+<details><summary>30. What is narrowing conversion?</summary><p>It converts to a type with a smaller range or precision and may lose information. Primitive narrowing usually requires an explicit cast.</p></details>
+<details><summary>31. What happens in integer division?</summary><p>The fractional part is discarded by truncation toward zero. Thus <code>7 / 2</code> evaluates to <code>3</code>, while <code>7.0 / 2</code> evaluates as floating point.</p></details>
+<details><summary>32. What does the modulus operator do?</summary><p>The <code>%</code> operator returns the remainder after division. It is often used for divisibility tests, such as <code>number % 2 == 0</code> to test evenness.</p></details>
+<details><summary>33. What is operator precedence?</summary><p>Precedence determines how operators group when parentheses are absent. Parentheses should be used when they make the intended grouping easier to see.</p></details>
+<details><summary>34. What is short-circuit evaluation?</summary><p>With <code>&amp;&amp;</code>, Java skips the right operand when the left side is false; with <code>||</code>, it skips the right side when the left side is true. This can prevent unnecessary work or unsafe dereferences.</p></details>
+<details><summary>35. What is the difference between == and equals()?</summary><p>For primitives, <code>==</code> compares values. For references, it tests whether both refer to the same object; <code>equals</code> is a method commonly overridden to compare content.</p></details>
+<details><summary>36. What does a bitwise shift do?</summary><p>A shift moves the bits of an integral value left or right. A left shift often multiplies by a power of two when overflow is not a concern.</p></details>
+<details><summary>37. What is Unicode?</summary><p>Unicode is a standard that assigns code points to characters and symbols across writing systems. Java source and text APIs use Unicode, with char values representing UTF-16 code units.</p></details>
+<details><summary>38. Are Java strings primitive values?</summary><p>No. <code>String</code> is a reference type and an object. String objects are immutable, meaning their character sequence cannot be changed after creation.</p></details>
+<details><summary>39. What is garbage collection?</summary><p>Garbage collection reclaims memory for objects that are no longer reachable by a program. It is nondeterministic and does not replace closing external resources.</p></details>
+<details><summary>40. Give two Java applications.</summary><p>Java is used in server-side business systems and desktop tools, among many others. Java code is also used in Android development, though Android applications run with Android APIs and runtime behavior rather than a standard desktop JVM.</p></details>
+
+<h2>References for further reading</h2>
+<p class="small"><a href="https://www.oracle.com/java/technologies/language-environment.html">The Java Language Environment (James Gosling and Henry McGilton, 1996)</a> · <a href="https://www.oracle.com/a/ocom/docs/dc/ww-brief-history-java-infographic.pdf">Oracle: A Brief History of Java</a> · <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-4.html">Java Language Specification: Types, Values, and Variables</a> · <a href="https://docs.oracle.com/javase/specs/jvms/se25/html/">Java Virtual Machine Specification</a></p>
+</main></body></html>

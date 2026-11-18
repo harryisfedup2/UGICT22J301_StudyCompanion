@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Unit 3 · Interfaces, Exceptions & Threads</title>
+<style>:root{color-scheme:dark;--bg:#0b1020;--panel:#151d32;--panel2:#1c2942;--line:#2b3a57;--text:#f3f6ff;--muted:#c1cbe0;--accent:#9bb2ff;--green:#8be0b0;--gold:#ffd18b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.68 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:920px;margin:auto;padding:22px 19px 54px}h1{font-size:clamp(29px,7vw,42px);line-height:1.15;margin:9px 0 12px}h2{font-size:25px;line-height:1.25;margin:38px 0 12px;color:var(--accent)}h3{font-size:19px;margin:24px 0 7px;color:#dbe4ff}p{margin:9px 0;color:var(--muted)}li{margin:6px 0;color:var(--muted)}strong{color:#fff}a{color:#a9c1ff}.tag{color:var(--accent);font-size:12px;font-weight:800;letter-spacing:.12em}.lead,.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:12px 0}.lead{border-left:4px solid var(--accent)}.callout{border-left:4px solid var(--gold);background:#251f1a;padding:12px 15px;border-radius:9px;margin:14px 0;color:#f0dfc4}.success{border-left-color:var(--green);background:#10251f}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}.grid .card{margin:0}.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:12px 0}table{border-collapse:collapse;width:100%;min-width:570px;background:var(--panel);font-size:14px}th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}th{color:var(--accent);background:var(--panel2)}td{color:var(--muted)}code{color:#b8f0cb;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}pre{overflow-x:auto;background:#080d18;border:1px solid var(--line);border-radius:12px;padding:15px;color:#e4ecff;font:13px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre}.toc a{display:inline-block;margin:4px 8px 4px 0;padding:5px 9px;border:1px solid var(--line);border-radius:20px;text-decoration:none;font-size:13px}details{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:9px 0;padding:11px 14px}summary{cursor:pointer;color:#eef2ff;font-weight:700}details p{margin:8px 2px 1px}.small{font-size:13px}@media(max-width:520px){main{padding:17px 14px 42px}body{font-size:15px}pre{font-size:12px;padding:12px}}</style></head><body><main>
+<div class="tag">UGICT22J301 · UNDERSTANDING OOPs THROUGH JAVA · 15 HOURS</div><h1>Unit 3: Interfaces, Exceptions &amp; Threads</h1>
+<p class="lead">Interfaces describe capabilities, exceptions describe abnormal outcomes, and threads let several tasks make progress within one process. A useful analogy is a busy clinic: an interface is the service promise, an exception is a clearly signaled problem such as an unavailable test, and threads are separate staff members. Shared patient records need rules (synchronization), or two people can overwrite each other's updates.</p>
+<nav class="toc"><a href="#interfaces">Interfaces</a><a href="#exceptions">Exceptions</a><a href="#threads">Threads</a><a href="#sync">Synchronization</a><a href="#viva">40 viva answers</a></nav>
+
+<h2 id="interfaces">Defining and implementing interfaces</h2>
+<p>An <strong>interface</strong> declares a contract that unrelated classes can implement. A caller can depend on the interface instead of a specific implementation, making programs easier to extend and test. A class uses <code>implements</code>; a class may implement several interfaces. An interface cannot be instantiated directly.</p>
+<p>Traditional interface methods without bodies are implicitly <code>public abstract</code>. Interface fields are implicitly <code>public static final</code> constants. Modern Java also supports <code>default</code> and <code>static</code> methods with bodies; private helper methods can be used by interface methods. A functional interface has one abstract method and can be implemented with a lambda, though lambdas are not required for this syllabus example.</p>
+<pre><code>interface Notifier {
+    void send(String message);
+    default void sendReminder() {
+        send("Please check your course notice.");
+    }
+}
+
+class ConsoleNotifier implements Notifier {
+    @Override
+    public void send(String message) {
+        System.out.println("Notice: " + message);
+    }
+}
+
+class InterfaceDemo {
+    public static void main(String[] args) {
+        Notifier service = new ConsoleNotifier();
+        service.sendReminder();
+    }
+}</code></pre>
+<p><strong>Line by line:</strong> <code>Notifier</code> names a capability and declares <code>send</code>. Its default method reuses the contract by calling <code>send</code>. <code>ConsoleNotifier</code> supplies the required public implementation. The variable is typed as the interface, so <code>main</code> is coupled to the promise rather than the concrete class. The default reminder calls the implementation's <code>send</code> method through dynamic dispatch.</p>
+<p><strong>Expected output:</strong> <code>Notice: Please check your course notice.</code></p>
+<p>An abstract class is a good fit when related classes share state or partial implementation and one superclass relationship makes sense. An interface is a good fit for a capability or contract that different class families can share. A class can extend only one class but implement multiple interfaces.</p>
+
+<h2 id="exceptions">Exception handling: failures as explicit control flow</h2>
+<p>An <strong>exception</strong> is an object that signals an abnormal condition and transfers control to a matching handler. The root family is <code>Throwable</code>, with two major branches: <code>Error</code> for serious problems applications usually should not try to recover from, and <code>Exception</code> for conditions an application may handle. <code>RuntimeException</code> and its subclasses are unchecked; other exception subclasses are checked by the compiler.</p>
+<div class="grid"><div class="card"><strong>Checked exception</strong><p>The method must catch it or declare it with <code>throws</code>. Examples include many I/O failures. This makes the caller consider a recoverable failure path.</p></div><div class="card"><strong>Unchecked exception</strong><p>A <code>RuntimeException</code> subclass need not be caught or declared. Examples include null dereference, invalid indexing, and invalid numeric parsing. These often indicate invalid input or a programming error.</p></div><div class="card"><strong>Error</strong><p>Represents serious runtime or environment trouble, such as resource exhaustion or linkage problems. Broadly catching <code>Throwable</code> can hide failures and is rarely appropriate.</p></div></div>
+<p>Place risky operations in a <code>try</code> block. A matching <code>catch</code> handles a compatible exception. A <code>finally</code> block normally runs as control leaves the try/catch, but it can be bypassed by process termination or a catastrophic VM failure; use try-with-resources for closeable resources. Catch specific exceptions before broader ones because a broad catch first would make later specific catches unreachable.</p>
+<p><code>throw</code> raises one exception object. <code>throws</code> declares possible checked exceptions in a method signature. A custom checked exception commonly extends <code>Exception</code>; a custom unchecked exception extends <code>RuntimeException</code>. Preserve the cause when wrapping a lower-level exception so debugging retains context.</p>
+<pre><code>class InvalidAgeException extends Exception {
+    InvalidAgeException(String message) {
+        super(message);
+    }
+}
+
+class Admission {
+    static void verifyAge(int age) throws InvalidAgeException {
+        if (age &lt; 18) {
+            throw new InvalidAgeException("Applicant must be at least 18");
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            verifyAge(16);
+            System.out.println("Eligible");
+        } catch (InvalidAgeException error) {
+            System.out.println("Rejected: " + error.getMessage());
+        } finally {
+            System.out.println("Verification complete");
+        }
+    }
+}</code></pre>
+<p><strong>Line by line:</strong> <code>InvalidAgeException</code> defines a domain-specific checked failure. Its constructor passes the message to <code>Exception</code>. <code>verifyAge</code> declares the checked exception with <code>throws</code>; the condition constructs and raises it with <code>throw</code>. In <code>main</code>, the call is inside <code>try</code>. If it returns, “Eligible” prints. Here the exception is caught, its message is shown, and the finally block prints the completion message in either path.</p>
+<p><strong>Expected output:</strong><br><code>Rejected: Applicant must be at least 18</code><br><code>Verification complete</code></p>
+<h3>Common exception mistakes</h3>
+<ul><li>Catching <code>Exception</code> too early and losing the chance to handle cases differently.</li><li>Writing an empty catch block that silently discards important information.</li><li>Using exceptions for ordinary branching, such as checking every array index instead of using the length.</li><li>Assuming <code>finally</code> always runs under every possible process-ending event.</li><li>Throwing a broad generic exception when a meaningful subtype would explain the contract better.</li><li>Confusing <code>throw</code> (raise an object now) with <code>throws</code> (declare a method's checked failure possibilities).</li></ul>
+
+<h2 id="threads">Java thread model and multithreaded programming</h2>
+<p>A <strong>process</strong> is an executing program with its own resources; a <strong>thread</strong> is an execution path within a process. Threads in the same process can share heap objects, which enables efficient communication but creates risks when multiple threads access mutable state. A CPU may run threads on separate cores or interleave them on one core; the Java specification describes allowed behavior without requiring one scheduling strategy.</p>
+<p>Java's <code>Thread</code> object represents a thread. Define work by implementing <code>Runnable</code> (usually the more flexible design) or extending <code>Thread</code> when specializing Thread is truly needed. Call <code>start()</code> once to request a new thread of execution; calling <code>run()</code> directly is an ordinary method call on the current thread. Use <code>join()</code> when one thread must wait for another to finish.</p>
+<div class="tablewrap"><table><thead><tr><th>Thread.State</th><th>Meaning</th></tr></thead><tbody><tr><td><code>NEW</code></td><td>Created but not yet started.</td></tr><tr><td><code>RUNNABLE</code></td><td>Executing in the JVM or eligible to run; Java's state model does not expose a separate RUNNING state.</td></tr><tr><td><code>BLOCKED</code></td><td>Waiting to acquire a monitor lock.</td></tr><tr><td><code>WAITING</code></td><td>Waiting indefinitely for another action, such as notification or completion of a joined thread.</td></tr><tr><td><code>TIMED_WAITING</code></td><td>Waiting for a bounded time, such as during <code>sleep</code> or timed wait.</td></tr><tr><td><code>TERMINATED</code></td><td>Execution has completed.</td></tr></tbody></table></div>
+<p>Thread priorities range from <code>MIN_PRIORITY</code> (1) to <code>MAX_PRIORITY</code> (10), with <code>NORM_PRIORITY</code> (5) as the default. A priority is a scheduling hint, not a guarantee of order or fairness. Correctness must never depend on one thread winning a race because it has a higher priority. <code>sleep</code> pauses the current thread for a time and does not release locks it already holds; <code>interrupt</code> is a cooperative signal that code should respond to, not a forceful thread kill.</p>
+<h3>Creating a thread with Runnable</h3>
+<pre><code>class GreetingTask implements Runnable {
+    private final String name;
+    GreetingTask(String name) { this.name = name; }
+    @Override
+    public void run() {
+        System.out.println("Hello from " + name);
+    }
+}
+
+class StartThreadDemo {
+    public static void main(String[] args) throws InterruptedException {
+        Thread worker = new Thread(new GreetingTask("worker"));
+        worker.start();
+        worker.join();
+        System.out.println("Main continues after worker");
+    }
+}</code></pre>
+<p>The task stores the message data and implements <code>run</code>. A <code>Thread</code> is constructed with that task. <code>start</code> begins a separate execution path. <code>join</code> makes the main thread wait for its completion, so the final line comes afterward. Without coordination, output ordering between threads is not generally predictable.</p>
+
+<h2 id="sync">Synchronization, communication, and deadlocks</h2>
+<p>A <strong>race condition</strong> occurs when a result depends on the timing of unsynchronized accesses. For example, <code>count++</code> is a read, calculation, and write, not one indivisible operation. If threads share a mutable object, guard related state with a shared lock or use a suitable concurrent utility. A synchronized instance method locks that object's monitor; a synchronized static method locks the class's <code>Class</code> object. Keep critical sections short and use the same lock consistently.</p>
+<pre><code>class SafeCounter {
+    private int value = 0;
+    synchronized void increment() { value++; }
+    synchronized int getValue() { return value; }
+}
+
+class CounterTask implements Runnable {
+    private final SafeCounter counter;
+    CounterTask(SafeCounter counter) { this.counter = counter; }
+    public void run() {
+        for (int i = 0; i &lt; 10000; i++) counter.increment();
+    }
+}
+
+public class Unit3Threads {
+    public static void main(String[] args) throws InterruptedException {
+        SafeCounter counter = new SafeCounter();
+        Thread first = new Thread(new CounterTask(counter));
+        Thread second = new Thread(new CounterTask(counter));
+        first.start();
+        second.start();
+        first.join();
+        second.join();
+        System.out.println(counter.getValue());
+    }
+}</code></pre>
+<p><strong>Line by line:</strong> <code>SafeCounter</code> owns mutable state. Both read and write operations use its monitor, so increments cannot interleave in a way that loses an update. Each Runnable holds the same counter reference and performs 10,000 increments. Two Thread objects start the tasks concurrently; <code>join</code> ensures both have completed before the final read. Since the protected operation is atomic with respect to this lock, the result is stable.</p>
+<p><strong>Expected output:</strong> <code>20000</code>.</p>
+<h3>Inter-thread communication with wait and notify</h3>
+<p><code>wait</code>, <code>notify</code>, and <code>notifyAll</code> are methods of <code>Object</code> and must be called while holding that object's monitor. A waiting thread releases the monitor and sleeps until notification, interruption, or timeout; it must reacquire the monitor before continuing. Always test a condition in a <code>while</code> loop because notification does not prove the condition is now true, and spurious wakeups are permitted. Prefer higher-level tools such as blocking queues for producer-consumer work in real applications.</p>
+<pre><code>synchronized (lock) {
+    while (!conditionIsReady()) {
+        lock.wait();
+    }
+    useReadyData();
+}
+// A producer changes the state under the same lock, then calls lock.notifyAll().</code></pre>
+<h3>Deadlock</h3>
+<p>A deadlock is a cycle of threads permanently waiting for locks held by one another. The classic necessary conditions are mutual exclusion, hold-and-wait, no preemption, and circular wait. Prevention strategies include acquiring multiple locks in a global order, minimizing nested locking, using timeouts where suitable, or replacing shared locking with message passing. Java does not generally guarantee detection or automatic recovery from application-level deadlocks.</p>
+
+<h2>History, applications, and common errors</h2>
+<p>Java's original design already treated threads and synchronization as language-and-runtime concerns rather than requiring each program to invent a separate threading model. This supported interactive and networked programs that needed multiple activities to progress. The formal Java Language Specification now describes threads, locks, and the memory model in its own chapter. Modern applications often use executors, futures, and concurrent collections instead of manually creating many raw threads, but the fundamentals in this unit explain how those tools behave.</p>
+<ul><li>Calling <code>run()</code> instead of <code>start()</code> does not create a new thread.</li><li>Calling <code>start()</code> twice on the same Thread throws <code>IllegalThreadStateException</code>.</li><li>Assuming thread output will appear in a fixed order when no synchronization establishes one.</li><li>Assuming a high priority guarantees earlier execution.</li><li>Using <code>wait</code> without owning the monitor causes <code>IllegalMonitorStateException</code>.</li><li>Checking a wait condition with <code>if</code> instead of a loop can make code incorrect after spurious wakeups or competing consumers.</li><li>Synchronizing on different lock objects does not protect shared state consistently.</li><li>Swallowing <code>InterruptedException</code>; code should normally restore the interrupt flag or propagate the exception.</li><li>Holding locks while doing slow I/O increases contention and can contribute to deadlocks.</li></ul>
+<p>Interfaces help with plug-in services and test doubles; exceptions support resilient file, network, and input handling; threads support concurrent servers, background tasks, user interfaces, and parallel work. For safety, prefer immutable data and well-tested concurrency utilities when they fit.</p>
+
+<h2 id="viva">Viva practice · 40 answered questions</h2>
+<details><summary>1. What is an interface?</summary><p>An interface defines a contract that implementing classes agree to provide. It lets callers depend on a capability rather than one concrete class.</p></details>
+<details><summary>2. Which keyword implements an interface?</summary><p>A class uses <code>implements</code>, followed by one or more interface names. It must provide required abstract methods unless the class is abstract.</p></details>
+<details><summary>3. Can one class implement multiple interfaces?</summary><p>Yes. Java allows one class to implement several interfaces, which supports multiple capabilities without multiple class inheritance.</p></details>
+<details><summary>4. What is a default interface method?</summary><p>It is an interface method with a body declared using <code>default</code>. It can provide shared behavior while remaining overridable by implementing classes.</p></details>
+<details><summary>5. What are interface fields?</summary><p>They are implicitly <code>public static final</code>, so they are constants associated with the interface rather than per-object state.</p></details>
+<details><summary>6. Interface or abstract class: when to choose?</summary><p>Use an interface for a capability shared by possibly unrelated classes. Use an abstract class when related subclasses should share instance state or partial implementation.</p></details>
+<details><summary>7. What is an exception?</summary><p>An exception is a Throwable object that signals an abnormal condition and transfers control toward a matching handler or caller.</p></details>
+<details><summary>8. What is the root of Java's exception hierarchy?</summary><p><code>Throwable</code> is the root class. Its two main branches are <code>Error</code> and <code>Exception</code>.</p></details>
+<details><summary>9. What is a checked exception?</summary><p>It is an exception other than RuntimeException or Error that the compiler requires a method to catch or declare. Many I/O exceptions are checked.</p></details>
+<details><summary>10. What is an unchecked exception?</summary><p>A RuntimeException or Error subclass is unchecked. The compiler does not require it to be caught or declared.</p></details>
+<details><summary>11. What is the difference between Error and Exception?</summary><p>Error generally signals serious conditions an application is not expected to recover from; Exception represents conditions a program may handle or report.</p></details>
+<details><summary>12. What does try do?</summary><p>A try block encloses code whose exceptions will be handled by following catch blocks or whose resources should be managed by try-with-resources.</p></details>
+<details><summary>13. What is catch used for?</summary><p>A catch block handles a thrown exception whose type is compatible with its parameter. Catch narrow cases before broader types.</p></details>
+<details><summary>14. What is finally?</summary><p>A finally block is used for cleanup when control leaves a try/catch construct. It is not guaranteed after process termination or severe VM failure.</p></details>
+<details><summary>15. What is try-with-resources?</summary><p>It automatically closes declared AutoCloseable resources when leaving the block. It is preferred for resources such as streams and database connections.</p></details>
+<details><summary>16. Distinguish throw and throws.</summary><p><code>throw</code> raises a specific exception object. <code>throws</code> declares possible checked exceptions in a method signature.</p></details>
+<details><summary>17. How do you create a custom checked exception?</summary><p>Define a class that extends <code>Exception</code>, usually with a constructor accepting a message and passing it to <code>super(message)</code>.</p></details>
+<details><summary>18. Why should catches be ordered from specific to general?</summary><p>A broad catch can match every subclass case below it, making those later catches unreachable. Specific-first order also documents recovery choices.</p></details>
+<details><summary>19. What is a thread?</summary><p>A thread is an execution path within a process. Threads in one process share heap objects and other process resources.</p></details>
+<details><summary>20. Process versus thread?</summary><p>A process has its own address space and resources; a thread is one path of execution inside a process. Threads share memory within their process.</p></details>
+<details><summary>21. How can Java work be defined for a thread?</summary><p>Implement <code>Runnable</code> and provide its <code>run</code> method, or extend <code>Thread</code>. Runnable separates the task from the thread mechanism.</p></details>
+<details><summary>22. Why call start instead of run?</summary><p><code>start</code> asks the JVM to create a separate execution path that later calls run. Calling run directly executes like an ordinary method on the current thread.</p></details>
+<details><summary>23. Can a Thread object be started twice?</summary><p>No. Once a thread has been started, starting that same Thread object again throws <code>IllegalThreadStateException</code>. Create a new Thread for another run.</p></details>
+<details><summary>24. What is the NEW state?</summary><p>The thread object has been constructed but <code>start</code> has not yet been called.</p></details>
+<details><summary>25. What is RUNNABLE state?</summary><p>The thread is executing or eligible to execute. Java's Thread.State does not separate a distinct RUNNING state.</p></details>
+<details><summary>26. What is BLOCKED state?</summary><p>The thread is waiting to acquire a monitor lock so it can enter a synchronized method or block.</p></details>
+<details><summary>27. What is WAITING state?</summary><p>The thread waits indefinitely for another thread or action, such as notification or completion after calling join without a timeout.</p></details>
+<details><summary>28. What does join do?</summary><p>It makes the current thread wait until the target thread terminates, or until a specified timeout if a timed overload is used.</p></details>
+<details><summary>29. Are thread priorities guarantees?</summary><p>No. Priorities are hints to the scheduler; program correctness must not depend on a particular order or fairness.</p></details>
+<details><summary>30. What does sleep do?</summary><p>It pauses the current thread for a requested duration, subject to scheduling. It does not release monitors the thread holds.</p></details>
+<details><summary>31. What is a race condition?</summary><p>A race condition occurs when the program's result depends on uncontrolled timing among operations, commonly concurrent reads and writes to shared mutable state.</p></details>
+<details><summary>32. What does synchronized guarantee?</summary><p>It provides mutual exclusion on a monitor and memory-visibility ordering around lock and unlock actions. It protects state only when competing code uses the same lock.</p></details>
+<details><summary>33. What lock does a synchronized instance method use?</summary><p>It locks the receiver object, the object referred to by <code>this</code> for that invocation.</p></details>
+<details><summary>34. What lock does a synchronized static method use?</summary><p>It locks the Class object representing the declaring class, not an individual instance.</p></details>
+<details><summary>35. What must be true before calling wait?</summary><p>The current thread must own the monitor of the object on which it calls <code>wait</code>, usually by being inside a synchronized block using that object.</p></details>
+<details><summary>36. Why test a wait condition in a while loop?</summary><p>A notification does not prove the condition is true, and spurious wakeups are permitted. The thread must recheck the condition after it reacquires the lock.</p></details>
+<details><summary>37. Difference between notify and notifyAll?</summary><p><code>notify</code> wakes one arbitrarily chosen waiter on that monitor; <code>notifyAll</code> wakes all waiters, which then compete to reacquire the lock.</p></details>
+<details><summary>38. What is a deadlock?</summary><p>A deadlock is a cycle where threads wait forever for locks held by one another. Consistent lock ordering can prevent many such cycles.</p></details>
+<details><summary>39. Name the four classic deadlock conditions.</summary><p>Mutual exclusion, hold-and-wait, no preemption, and circular wait. Breaking at least one condition prevents that deadlock model.</p></details>
+<details><summary>40. What should code do when interrupted?</summary><p>It should respond cooperatively. If it cannot propagate <code>InterruptedException</code>, it should usually restore the interrupt flag with <code>Thread.currentThread().interrupt()</code> after cleanup.</p></details>
+
+<h2>References for further reading</h2><p class="small"><a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-11.html">Java Language Specification: Exceptions</a> · <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html">Java Language Specification: Threads and Locks</a> · <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Thread.html">Thread API</a> · <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Runnable.html">Runnable API</a></p>
+</main></body></html>

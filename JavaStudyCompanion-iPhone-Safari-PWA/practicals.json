@@ -1,0 +1,182 @@
+[
+  {
+    "title": "1. Generate first n prime numbers",
+    "explanation": "A prime number is divisible only by 1 and itself. This program generates the first n prime numbers.",
+    "code": "class PrimeNumbers {\n    public static void main(String[] args) {\n        int n = 5, count = 0, num = 2;\n        while (count < n) {\n            boolean prime = true;\n            for (int i = 2; i <= num / 2; i++) {\n                if (num % i == 0) { prime = false; break; }\n            }\n            if (prime) { System.out.print(num + \" \"); count++; }\n            num++;\n        }\n    }\n}",
+    "output": "2 3 5 7 11"
+  },
+  {
+    "title": "2. Maximum of three numbers using conditional operator",
+    "explanation": "The conditional operator (?:) selects the greatest of three numbers.",
+    "code": "class Maximum {\n    public static void main(String[] args) {\n        int a = 10, b = 25, c = 15;\n        int max = (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);\n        System.out.println(\"Maximum = \" + max);\n    }\n}",
+    "output": "Maximum = 25"
+  },
+  {
+    "title": "3. Reverse digits using while loop",
+    "explanation": "A while loop extracts digits and reverses their order using arithmetic operations.",
+    "code": "class ReverseNumber {\n    public static void main(String[] args) {\n        int num = 1234, reverse = 0;\n        while (num != 0) {\n            int digit = num % 10;\n            reverse = reverse * 10 + digit;\n            num = num / 10;\n        }\n        System.out.println(\"Reverse = \" + reverse);\n    }\n}",
+    "output": "Reverse = 4321"
+  },
+  {
+    "title": "4. Calculate factorial of a number",
+    "explanation": "Factorial is the product of all positive integers from 1 to a given number.",
+    "code": "class Factorial {\n    public static void main(String[] args) {\n        int n = 5;\n        long fact = 1;\n        for (int i = 1; i <= n; i++) fact *= i;\n        System.out.println(\"Factorial = \" + fact);\n    }\n}",
+    "output": "Factorial = 120"
+  },
+  {
+    "title": "5. Demonstrate the this keyword and private members",
+    "explanation": "The this keyword refers to the current object. Private members can be accessed inside their own class.",
+    "code": "class Student {\n    private String name;\n    Student(String name) { this.name = name; }\n    void display() { System.out.println(this.name); }\n}\nclass ThisDemo {\n    public static void main(String[] args) {\n        Student s = new Student(\"Harry\");\n        s.display();\n    }\n}",
+    "output": "Harry"
+  },
+  {
+    "title": "6. Rectangle area and perimeter using super and this",
+    "explanation": "The super keyword accesses superclass members, while this refers to the current object.",
+    "code": "class Shape {\n    int length = 10, breadth = 5;\n}\nclass Rectangle extends Shape {\n    void calculate() {\n        int area = super.length * super.breadth;\n        System.out.println(\"Area = \" + area);\n        System.out.println(\"Perimeter = \" +\n            2 * (this.length + this.breadth));\n    }\n}\nclass RectangleDemo {\n    public static void main(String[] args) {\n        new Rectangle().calculate();\n    }\n}",
+    "output": "Area = 50\nPerimeter = 30"
+  },
+  {
+    "title": "7. Abstract classes and methods",
+    "explanation": "An abstract class can contain abstract and concrete methods. Subclasses implement abstract methods.",
+    "code": "abstract class Animal {\n    abstract void sound();\n}\nclass Dog extends Animal {\n    void sound() { System.out.println(\"Dog barks\"); }\n}\nclass AbstractDemo {\n    public static void main(String[] args) {\n        Animal a = new Dog();\n        a.sound();\n    }\n}",
+    "output": "Dog barks"
+  },
+  {
+    "title": "8. Access modifiers in Java",
+    "explanation": "Access modifiers control the visibility of classes, variables and methods.",
+    "code": "class AccessDemo {\n    public int a = 10;\n    private int b = 20;\n    protected int c = 30;\n    int d = 40;\n    void display() {\n        System.out.println(a + \" \" + b + \" \" + c + \" \" + d);\n    }\n    public static void main(String[] args) {\n        new AccessDemo().display();\n    }\n}",
+    "output": "10 20 30 40"
+  },
+  {
+    "title": "9. Sort elements of an array",
+    "explanation": "An array stores multiple values. Sorting arranges its elements in ascending order.",
+    "code": "import java.util.Arrays;\nclass SortArray {\n    public static void main(String[] args) {\n        int[] a = {5, 2, 8, 1, 3};\n        Arrays.sort(a);\n        System.out.println(Arrays.toString(a));\n    }\n}",
+    "output": "[1, 2, 3, 5, 8]"
+  },
+  {
+    "title": "10. Matrix operations using multidimensional arrays",
+    "explanation": "A two-dimensional array stores data in rows and columns, like a matrix.",
+    "code": "class MatrixAddition {\n    public static void main(String[] args) {\n        int[][] a = {{1, 2}, {3, 4}};\n        int[][] b = {{5, 6}, {7, 8}};\n        for (int i = 0; i < 2; i++) {\n            for (int j = 0; j < 2; j++) {\n                System.out.print((a[i][j] + b[i][j]) + \" \");\n            }\n            System.out.println();\n        }\n    }\n}",
+    "output": "6 8\n10 12"
+  },
+  {
+    "title": "11. Constructor overloading",
+    "explanation": "Constructor overloading means defining multiple constructors with different parameter lists.",
+    "code": "class Box {\n    int length, breadth;\n    Box() { length = 1; breadth = 1; }\n    Box(int l, int b) { length = l; breadth = b; }\n    void display() { System.out.println(length * breadth); }\n    public static void main(String[] args) {\n        new Box().display();\n        new Box(5, 4).display();\n    }\n}",
+    "output": "1\n20"
+  },
+  {
+    "title": "12. Copy constructor",
+    "explanation": "A copy constructor creates a new object by copying values from another object.",
+    "code": "class CopyStudent {\n    int marks;\n    CopyStudent(int marks) { this.marks = marks; }\n    CopyStudent(CopyStudent s) { this.marks = s.marks; }\n    public static void main(String[] args) {\n        CopyStudent s1 = new CopyStudent(90);\n        CopyStudent s2 = new CopyStudent(s1);\n        System.out.println(s2.marks);\n    }\n}",
+    "output": "90"
+  },
+  {
+    "title": "13. Demonstrate the final keyword in field declaration",
+    "explanation": "The final keyword prevents a variable from being reassigned after initialization.",
+    "code": "class FinalDemo {\n    final int VALUE = 100;\n    public static void main(String[] args) {\n        FinalDemo obj = new FinalDemo();\n        System.out.println(obj.VALUE);\n    }\n}",
+    "output": "100"
+  },
+  {
+    "title": "14. Single, multilevel and hierarchical inheritance",
+    "explanation": "Inheritance allows classes to acquire properties and methods from another class.",
+    "code": "class AnimalBase {\n    void eat() { System.out.println(\"Eating\"); }\n}\nclass DogChild extends AnimalBase { }\nclass Puppy extends DogChild { }\nclass CatChild extends AnimalBase { }\nclass InheritanceDemo {\n    public static void main(String[] args) {\n        new Puppy().eat();\n        new CatChild().eat();\n    }\n}",
+    "output": "Eating\nEating"
+  },
+  {
+    "title": "15. Method overriding",
+    "explanation": "Method overriding allows a subclass to provide its own implementation of an inherited method.",
+    "code": "class Parent {\n    void show() { System.out.println(\"Parent method\"); }\n}\nclass Child extends Parent {\n    @Override\n    void show() { System.out.println(\"Child method\"); }\n}\nclass OverrideDemo {\n    public static void main(String[] args) {\n        new Child().show();\n    }\n}",
+    "output": "Child method"
+  },
+  {
+    "title": "16. Subclass constructor invoking superclass constructor",
+    "explanation": "A subclass constructor uses super() to invoke its superclass constructor.",
+    "code": "class ParentClass {\n    ParentClass() { System.out.println(\"Parent constructor\"); }\n}\nclass ChildClass extends ParentClass {\n    ChildClass() { super(); System.out.println(\"Child constructor\"); }\n}\nclass ConstructorDemo {\n    public static void main(String[] args) {\n        new ChildClass();\n    }\n}",
+    "output": "Parent constructor\nChild constructor"
+  },
+  {
+    "title": "17. Demonstrate final class",
+    "explanation": "A final class cannot be extended by another class.",
+    "code": "final class Vehicle {\n    void show() { System.out.println(\"Final class example\"); }\n}\nclass FinalClassDemo {\n    public static void main(String[] args) {\n        new Vehicle().show();\n    }\n}",
+    "output": "Final class example"
+  },
+  {
+    "title": "18. Multiple try blocks and multiple catch exceptions",
+    "explanation": "Separate try-catch structures can handle exceptions from different operations.",
+    "code": "class MultipleTry {\n    public static void main(String[] args) {\n        try { int a = 10 / 0; }\n        catch (ArithmeticException e) { System.out.println(\"Division error\"); }\n        try { int[] a = {1, 2}; System.out.println(a[5]); }\n        catch (ArrayIndexOutOfBoundsException e) { System.out.println(\"Array error\"); }\n    }\n}",
+    "output": "Division error\nArray error"
+  },
+  {
+    "title": "19. Nested try statements",
+    "explanation": "A nested try statement places one try block inside another try block.",
+    "code": "class NestedTry {\n    public static void main(String[] args) {\n        try {\n            try { int a = 10 / 0; }\n            catch (ArithmeticException e) { System.out.println(\"Inner catch\"); }\n            int[] x = {1, 2};\n            System.out.println(x[5]);\n        } catch (ArrayIndexOutOfBoundsException e) {\n            System.out.println(\"Outer catch\");\n        }\n    }\n}",
+    "output": "Inner catch\nOuter catch"
+  },
+  {
+    "title": "20. Exception handling using multiple catch blocks",
+    "explanation": "Multiple catch blocks handle different exception types separately.",
+    "code": "class MultipleCatch {\n    public static void main(String[] args) {\n        try {\n            int a = Integer.parseInt(\"abc\");\n            System.out.println(a);\n        } catch (NumberFormatException e) {\n            System.out.println(\"Invalid number\");\n        } catch (Exception e) {\n            System.out.println(\"Other error\");\n        }\n    }\n}",
+    "output": "Invalid number"
+  },
+  {
+    "title": "21. User-defined exception using throw",
+    "explanation": "A user-defined exception is created by extending the Exception class.",
+    "code": "class AgeException extends Exception {\n    AgeException(String message) { super(message); }\n}\nclass CustomExceptionDemo {\n    public static void main(String[] args) {\n        int age = 15;\n        try {\n            if (age < 18) throw new AgeException(\"Not eligible\");\n            System.out.println(\"Eligible\");\n        } catch (AgeException e) {\n            System.out.println(e.getMessage());\n        }\n    }\n}",
+    "output": "Not eligible"
+  },
+  {
+    "title": "22. Package access: same and external classes",
+    "explanation": "Package access demonstrates how classes in a package can use accessible members.",
+    "code": "package mypackage;\nclass PackageDemo {\n    void show() { System.out.println(\"Package member access\"); }\n    public static void main(String[] args) {\n        new PackageDemo().show();\n    }\n}",
+    "output": "Package member access"
+  },
+  {
+    "title": "23. Import and access a user-defined package",
+    "explanation": "The import statement allows a class to use a class from another package.",
+    "code": "package mypackage;\npublic class Message {\n    public void display() { System.out.println(\"Hello from mypackage\"); }\n}\n// In another file, outside the package:\nimport mypackage.Message;\nclass UseMessage {\n    public static void main(String[] args) {\n        new Message().display();\n    }\n}",
+    "output": "Hello from mypackage"
+  },
+  {
+    "title": "24. Implementation of interfaces",
+    "explanation": "An interface defines methods that an implementing class must provide.",
+    "code": "interface Printable {\n    void print();\n}\nclass Document implements Printable {\n    public void print() { System.out.println(\"Printing document\"); }\n}\nclass InterfaceDemo {\n    public static void main(String[] args) {\n        new Document().print();\n    }\n}",
+    "output": "Printing document"
+  },
+  {
+    "title": "25. AWT program for string operations",
+    "explanation": "AWT provides GUI components. This example performs string operations through a window.",
+    "code": "import java.awt.*;\nimport java.awt.event.*;\nclass StringAWT extends Frame implements ActionListener {\n    TextField input = new TextField(20);\n    Label result = new Label(\"Result appears here\");\n    Button button = new Button(\"Convert to Uppercase\");\n    StringAWT() {\n        setLayout(new FlowLayout());\n        add(input); add(button); add(result);\n        button.addActionListener(this);\n        setSize(350, 150); setVisible(true);\n        addWindowListener(new WindowAdapter() {\n            public void windowClosing(WindowEvent e) { dispose(); }\n        });\n    }\n    public void actionPerformed(ActionEvent e) {\n        result.setText(input.getText().toUpperCase());\n    }\n    public static void main(String[] args) { new StringAWT(); }\n}",
+    "output": "Displays the entered text in uppercase in an AWT window"
+  },
+  {
+    "title": "26. Create multiple threads in Java",
+    "explanation": "Multiple threads allow different tasks to execute concurrently.",
+    "code": "class MyThread extends Thread {\n    String message;\n    MyThread(String message) { this.message = message; }\n    public void run() {\n        for (int i = 1; i <= 3; i++) System.out.println(message + \" \" + i);\n    }\n}\nclass ThreadDemo {\n    public static void main(String[] args) {\n        new MyThread(\"Thread A\").start();\n        new MyThread(\"Thread B\").start();\n    }\n}",
+    "output": "Thread A and Thread B messages (order may vary)"
+  },
+  {
+    "title": "27. Implement thread using Runnable interface",
+    "explanation": "The Runnable interface provides a way to define a task for a thread.",
+    "code": "class MyTask implements Runnable {\n    public void run() {\n        System.out.println(\"Runnable thread is running\");\n    }\n}\nclass RunnableDemo {\n    public static void main(String[] args) {\n        Thread t = new Thread(new MyTask());\n        t.start();\n    }\n}",
+    "output": "Runnable thread is running"
+  },
+  {
+    "title": "28. String methods: equals, reverse and change case",
+    "explanation": "String methods can compare, reverse and change the case of text.",
+    "code": "class StringMethods {\n    public static void main(String[] args) {\n        String a = \"Java\", b = \"Java\";\n        System.out.println(\"Equal: \" + a.equals(b));\n        System.out.println(\"Reverse: \" + new StringBuilder(a).reverse());\n        System.out.println(\"Uppercase: \" + a.toUpperCase());\n        System.out.println(\"Lowercase: \" + a.toLowerCase());\n    }\n}",
+    "output": "Equal: true\nReverse: avaJ\nUppercase: JAVA\nLowercase: java"
+  },
+  {
+    "title": "29. Concatenate strings using StringBuffer",
+    "explanation": "StringBuffer allows strings to be modified and concatenated.",
+    "code": "class BufferDemo {\n    public static void main(String[] args) {\n        StringBuffer sb = new StringBuffer(\"Java\");\n        sb.append(\" Study Companion\");\n        System.out.println(sb);\n    }\n}",
+    "output": "Java Study Companion"
+  },
+  {
+    "title": "30. Basic calculator operations",
+    "explanation": "A calculator performs arithmetic operations such as addition, subtraction, multiplication and division.",
+    "code": "class Calculator {\n    public static void main(String[] args) {\n        double a = 20, b = 5;\n        System.out.println(\"Addition = \" + (a + b));\n        System.out.println(\"Subtraction = \" + (a - b));\n        System.out.println(\"Multiplication = \" + (a * b));\n        if (b != 0) System.out.println(\"Division = \" + (a / b));\n    }\n}",
+    "output": "Addition = 25.0\nSubtraction = 15.0\nMultiplication = 100.0\nDivision = 4.0"
+  }
+]

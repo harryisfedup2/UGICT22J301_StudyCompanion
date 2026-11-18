@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Unit 4 · Strings, GUI & JDBC</title>
+<style>:root{color-scheme:dark;--bg:#0b1020;--panel:#151d32;--panel2:#1c2942;--line:#2b3a57;--text:#f3f6ff;--muted:#c1cbe0;--accent:#9bb2ff;--green:#8be0b0;--gold:#ffd18b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.68 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:920px;margin:auto;padding:22px 19px 54px}h1{font-size:clamp(29px,7vw,42px);line-height:1.15;margin:9px 0 12px}h2{font-size:25px;line-height:1.25;margin:38px 0 12px;color:var(--accent)}h3{font-size:19px;margin:24px 0 7px;color:#dbe4ff}p{margin:9px 0;color:var(--muted)}li{margin:6px 0;color:var(--muted)}strong{color:#fff}a{color:#a9c1ff}.tag{color:var(--accent);font-size:12px;font-weight:800;letter-spacing:.12em}.lead,.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:12px 0}.lead{border-left:4px solid var(--accent)}.callout{border-left:4px solid var(--gold);background:#251f1a;padding:12px 15px;border-radius:9px;margin:14px 0;color:#f0dfc4}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}.grid .card{margin:0}.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:12px 0}table{border-collapse:collapse;width:100%;min-width:570px;background:var(--panel);font-size:14px}th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}th{color:var(--accent);background:var(--panel2)}td{color:var(--muted)}code{color:#b8f0cb;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}pre{overflow-x:auto;background:#080d18;border:1px solid var(--line);border-radius:12px;padding:15px;color:#e4ecff;font:13px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre}.toc a{display:inline-block;margin:4px 8px 4px 0;padding:5px 9px;border:1px solid var(--line);border-radius:20px;text-decoration:none;font-size:13px}details{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:9px 0;padding:11px 14px}summary{cursor:pointer;color:#eef2ff;font-weight:700}details p{margin:8px 2px 1px}.small{font-size:13px}@media(max-width:520px){main{padding:17px 14px 42px}body{font-size:15px}pre{font-size:12px;padding:12px}}</style></head><body><main>
+<div class="tag">UGICT22J301 · UNDERSTANDING OOPs THROUGH JAVA · 15 HOURS</div><h1>Unit 4: Strings, GUI &amp; JDBC</h1>
+<p class="lead">This unit connects Java's everyday library types to user-facing and data-driven programs. Strings model text, wrapper classes let primitives participate in object-based APIs, AWT and Swing turn events into interface behavior, and JDBC provides a database-independent programming interface. Picture a library kiosk: it receives a visitor's text, responds to clicks, shows records, and stores changes through a database driver.</p>
+<nav class="toc"><a href="#strings">Strings</a><a href="#wrappers">Wrappers</a><a href="#runtime">Runtime &amp; memory</a><a href="#gui">AWT &amp; Swing</a><a href="#jdbc">JDBC</a><a href="#viva">40 viva answers</a></nav>
+
+<h2 id="strings">String construction, operations, extraction, search, and comparison</h2>
+<p><code>String</code> is a reference type representing an immutable sequence of UTF-16 code units. <strong>Immutable</strong> means that methods do not modify the existing String object; operations that appear to change text return another String. Immutability makes strings safer to share, easier to cache, and suitable as map keys when used correctly.</p>
+<pre><code>String language = "Java";                 // string literal
+String phrase = new String("Study Java"); // explicit construction
+char[] letters = {'C', 'o', 'd', 'e'};
+String word = new String(letters);        // construct from a char array
+String joined = language + " " + word;    // returns a new String</code></pre>
+<p>String literals with the same contents may share an interned object. Do not rely on that sharing for content comparison: use <code>equals</code>. The <code>new String(...)</code> constructor is legal but often unnecessary for literals because it creates another object without changing the text.</p>
+<div class="tablewrap"><table><thead><tr><th>Operation</th><th>Example</th><th>Meaning / caution</th></tr></thead><tbody>
+<tr><td>Length and character</td><td><code>text.length()</code>, <code>text.charAt(0)</code></td><td>Length is UTF-16 code units. <code>charAt</code> returns one code unit, not necessarily one full Unicode code point.</td></tr>
+<tr><td>Extraction</td><td><code>getChars</code>, <code>toCharArray</code>, <code>substring</code></td><td>Copy a range to a char array, get a mutable array copy, or create a substring. End indexes are exclusive.</td></tr>
+<tr><td>Search</td><td><code>indexOf</code>, <code>lastIndexOf</code>, <code>contains</code></td><td>Find a character or sequence. Index methods return <code>-1</code> when absent.</td></tr>
+<tr><td>Prefix / suffix</td><td><code>startsWith</code>, <code>endsWith</code></td><td>Check boundaries without manually slicing the string.</td></tr>
+<tr><td>Comparison</td><td><code>equals</code>, <code>equalsIgnoreCase</code></td><td>Check content equality; case-insensitive behavior is not a universal language-neutral collation rule.</td></tr>
+<tr><td>Ordering</td><td><code>compareTo</code></td><td>Lexicographic UTF-16-based ordering; negative, zero, or positive indicates ordering, not a guaranteed exact magnitude.</td></tr>
+<tr><td>Transformation</td><td><code>replace</code>, <code>toUpperCase</code>, <code>trim</code></td><td>Returns a String. For locale-sensitive case rules, choose a locale deliberately; for machine keys use a stable locale such as ROOT.</td></tr>
+</tbody></table></div>
+<p><strong>Character extraction:</strong> use <code>charAt</code> for a UTF-16 code unit; <code>getChars</code> copies part of a String into a caller-provided char array; <code>toCharArray</code> creates a new array. If each Unicode code point matters, iterate with <code>codePoints()</code>, because supplementary characters use a surrogate pair.</p>
+<p><strong>Searching:</strong> <code>indexOf("ava")</code> returns the first starting index or -1. <code>lastIndexOf</code> searches from the end. Searches are case-sensitive unless the program normalizes or uses a dedicated case-insensitive strategy.</p>
+<p><strong>Comparing:</strong> <code>a == b</code> asks whether the references identify the same object; <code>a.equals(b)</code> asks whether the content is equal. <code>compareTo</code> supports sorting lexically. For locale-aware human-language sorting, use a <code>Collator</code> rather than assuming Unicode code-unit order matches dictionary order.</p>
+
+<h2>StringBuffer compared with String</h2>
+<div class="tablewrap"><table><thead><tr><th>Property</th><th>String</th><th>StringBuffer</th></tr></thead><tbody><tr><td>Mutability</td><td>Immutable: edits create a new String.</td><td>Mutable: methods such as append and insert change the buffer.</td></tr><tr><td>Repeated concatenation</td><td>Clear for a small number of operations; repeated loop concatenation may create many temporary values.</td><td>Useful for repeated changes, especially when shared mutable text needs synchronized methods.</td></tr><tr><td>Synchronization</td><td>Immutable content is naturally safe to share after safe publication.</td><td>Its methods are synchronized, but a sequence of multiple calls is not automatically one atomic transaction.</td></tr><tr><td>Alternatives</td><td>Use for values that should not change.</td><td>For one-thread text building, <code>StringBuilder</code> is usually faster and generally preferred.</td></tr></tbody></table></div>
+<pre><code>StringBuffer notice = new StringBuffer("Java");
+notice.append(" Study");
+notice.insert(5, "Careful ");
+System.out.println(notice);</code></pre>
+<p>Expected output: <code>Java Careful Study</code>. The buffer itself changes. In current Java, <code>StringBuffer</code> implements <code>Comparable</code> but does not define content-based <code>equals</code>; do not assume two buffers compare equal by text using <code>equals</code>.</p>
+
+<h2 id="wrappers">Wrapper classes and boxing</h2>
+<p>Each primitive has an object wrapper: <code>Byte</code>, <code>Short</code>, <code>Integer</code>, <code>Long</code>, <code>Float</code>, <code>Double</code>, <code>Character</code>, and <code>Boolean</code>. Wrappers let primitive values be used where an object is required, such as generic collections. <strong>Autoboxing</strong> converts a primitive to its wrapper; <strong>unboxing</strong> extracts the primitive value.</p>
+<pre><code>Integer boxed = 42;                 // autoboxing
+int value = boxed;                  // unboxing
+int parsed = Integer.parseInt("73");
+Integer objectValue = Integer.valueOf("73");
+System.out.println(parsed + value); // 115</code></pre>
+<p><code>parseInt</code> returns primitive <code>int</code>; <code>valueOf</code> returns an <code>Integer</code>. Invalid text can cause <code>NumberFormatException</code>. A null wrapper cannot be unboxed and causes <code>NullPointerException</code>. Wrapper objects are immutable. Use <code>equals</code> for wrapper value equality rather than <code>==</code>, which compares object identity.</p>
+
+<h2 id="runtime">Runtime class and memory management</h2>
+<p><code>Runtime</code> represents the running Java application environment. <code>Runtime.getRuntime()</code> returns the process-wide runtime object. Methods can report approximate memory figures, the available processor count, or request garbage collection. <code>Runtime.exec</code> can start an operating-system process, but it requires careful argument, stream, exit-status, and security handling; <code>ProcessBuilder</code> is often clearer. Values such as free memory are snapshots, not reservations or guarantees.</p>
+<p><strong>Memory areas, conceptually:</strong> each thread has a stack of method frames containing local variables and call state; objects and arrays are generally allocated in the shared heap; class metadata is managed in a runtime area often implemented as metaspace. These are conceptual JVM areas and implementation details can vary. Garbage collection finds unreachable heap objects and reclaims their storage. It does not guarantee when reclamation happens, and it does not close files, sockets, or database connections.</p>
+<p>A <strong>memory leak</strong> in a garbage-collected program can still happen when code unintentionally keeps references to objects it no longer needs (for example, an ever-growing static collection). Close external resources explicitly with try-with-resources. Do not use a call requesting garbage collection as a correctness or timing mechanism.</p>
+
+<h2 id="gui">AWT, layout managers, event handling, and Swing</h2>
+<h3>AWT fundamentals</h3>
+<p>The Abstract Window Toolkit (<strong>AWT</strong>) is Java's original desktop GUI toolkit. It provides controls such as <code>Button</code>, <code>Label</code>, <code>TextField</code>, <code>TextArea</code>, <code>Checkbox</code>, <code>Choice</code>, and containers such as <code>Frame</code> and <code>Panel</code>. Many AWT controls use native platform peers (often called heavyweight components), so appearance and behavior can reflect the operating system.</p>
+<p>A <strong>layout manager</strong> calculates component positions and sizes as a container changes. <code>FlowLayout</code> places components in a row and wraps; <code>BorderLayout</code> arranges north/south/east/west/center regions; <code>GridLayout</code> uses equal-sized cells; <code>CardLayout</code> switches among pages; <code>GridBagLayout</code> provides flexible constraints for complex forms. Layout managers adapt better than hard-coded pixel coordinates.</p>
+<h3>Event delegation</h3>
+<p>In the event-delegation model, a component is the <strong>event source</strong>, an event object describes what happened, and a registered <strong>listener</strong> receives a callback. For example, a button emits an <code>ActionEvent</code> to an <code>ActionListener</code>. An adapter class can provide empty implementations for a listener interface with many methods. Keep callbacks short; long database or network work should happen off the UI thread, then update the UI safely.</p>
+<h3>Swing</h3>
+<p>Swing is a richer desktop GUI toolkit built on top of AWT infrastructure. Many Swing components are lightweight and implemented largely in Java, with a pluggable look and feel. Common components include <code>JFrame</code>, <code>JPanel</code>, <code>JLabel</code>, <code>JButton</code>, <code>JTextField</code>, <code>JTextArea</code>, <code>JTable</code>, and <code>JOptionPane</code>. Swing still uses AWT event, graphics, and layout foundations.</p>
+<p>Most Swing component creation and updates must happen on the <strong>Event Dispatch Thread (EDT)</strong>. Event listeners run there, so a slow callback can freeze painting and input. Build/show the UI using <code>SwingUtilities.invokeLater</code>; run long work in a background worker and publish results back on the EDT.</p>
+<pre><code>import java.awt.FlowLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
+
+class SwingHello {
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -&gt; {
+            JFrame frame = new JFrame("Course kiosk");
+            JLabel message = new JLabel("Ready");
+            JButton button = new JButton("Check status");
+            button.addActionListener(event -&gt; message.setText("Status checked"));
+            frame.setLayout(new FlowLayout());
+            frame.add(message);
+            frame.add(button);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.pack();
+            frame.setVisible(true);
+        });
+    }
+}</code></pre>
+<p><strong>Line by line:</strong> imports name the Swing and layout classes. The main method schedules GUI setup on the EDT. A frame is the top-level window; a label displays status and a button emits action events. The lambda is the button's listener; it changes the label in response to the click. FlowLayout positions the controls. The close operation exits the demo, <code>pack</code> sizes the window to its components, and <code>setVisible</code> displays it. Expected visible state: a “Ready” label and a “Check status” button; after clicking, the label reads “Status checked.” The UI itself is interactive, so there is no fixed console output.</p>
+
+<h2 id="jdbc">JDBC: Java Database Connectivity</h2>
+<p>JDBC is a standard set of Java interfaces for connecting to relational databases and executing SQL. It separates application code from a specific database vendor's implementation: a JDBC driver translates standard JDBC calls into the database protocol. JDBC does not supply a database server or its driver automatically for every database.</p>
+<p><strong>History:</strong> early Java lacked a standard database-access API. JavaSoft published the JDBC specification in 1996 as a vendor-neutral framework; the original JDBC 1.0 API became part of JDK 1.1. New API versions followed Java platform releases, adding capabilities while preserving the common connection-and-statement model.</p>
+<ol><li>Add a JDBC driver dependency and configure a JDBC URL, credentials, and secure configuration source.</li><li>Obtain a <code>Connection</code> using <code>DriverManager</code> or a managed <code>DataSource</code>.</li><li>Create a <code>PreparedStatement</code> for parameterized SQL, set parameters, and execute it.</li><li>Read query rows through the forward-moving <code>ResultSet</code> cursor.</li><li>Close result sets, statements, and connections; try-with-resources is the usual pattern.</li><li>For multiple related updates, use a transaction with commit or rollback when needed.</li></ol>
+<p><strong>Security:</strong> do not concatenate untrusted text into SQL. Use placeholders in <code>PreparedStatement</code> and bind values. This reduces SQL injection risk and lets the driver handle values correctly.</p>
+<pre><code>import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+class JdbcLookup {
+    public static void main(String[] args) {
+        String url = "jdbc:yourdb://localhost:5432/campus";
+        String sql = "SELECT name FROM student WHERE roll_no = ?";
+        try (Connection connection = DriverManager.getConnection(url, "app_user", "secret");
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, 7);
+            try (ResultSet rows = statement.executeQuery()) {
+                while (rows.next()) {
+                    System.out.println(rows.getString("name"));
+                }
+            }
+        } catch (SQLException problem) {
+            System.err.println("Database operation failed: " + problem.getMessage());
+        }
+    }
+}</code></pre>
+<p><strong>Line by line:</strong> the imports name JDBC interfaces and exception type. The URL identifies a database and location; its exact syntax is driver-specific. The SQL uses a placeholder, not a concatenated roll number. <code>getConnection</code> requires a compatible driver and reachable database. The prepared statement binds roll number 7 to the first placeholder. <code>executeQuery</code> returns rows, and <code>next</code> advances the cursor; <code>getString</code> reads a column. Nested try-with-resources closes the result set, statement, and connection. A SQLException is reported to the error stream.</p>
+<p><strong>Expected behavior:</strong> if the configured database contains roll number 7, its name is printed; otherwise there are no result lines. If the driver, URL, credentials, or database are unavailable, a clear error is printed. The sample intentionally uses a placeholder URL and credentials and will need a real driver, database, and schema before it can run.</p>
+
+<h2>History, applications, and common mistakes</h2>
+<p>AWT was part of Java's class libraries from the beginning and offered a common GUI API over operating-system widgets. Swing emerged with the Java Foundation Classes and the Java 2 era, adding a broad set of mostly lightweight components and a pluggable appearance. JDBC was standardized in the mid-1990s so Java applications and database vendors could meet through a common interface. These APIs reflect Java's wider design pattern: define contracts and let platform or vendor implementations supply the details.</p>
+<ul><li>Using <code>==</code> to compare String contents.</li><li>Assuming String methods mutate the original; they return a result instead.</li><li>Assuming <code>length()</code> counts user-perceived symbols rather than UTF-16 units.</li><li>Comparing wrapper objects with <code>==</code>, or unboxing a nullable wrapper.</li><li>Calling <code>System.gc()</code> and expecting immediate cleanup.</li><li>Creating Swing components outside the EDT or doing slow SQL in an event callback.</li><li>Using absolute pixel positioning when a layout manager would adapt to resizing and font changes.</li><li>Building SQL by concatenating user input, failing to close resources, or hard-coding real credentials.</li><li>Assuming JDBC alone supplies a database driver or opens a database service.</li></ul>
+<p>Strings and wrappers appear throughout application code. AWT/Swing remain useful for desktop tools, teaching, and legacy systems; they are not Android UI toolkits. JDBC is widely used in server and desktop Java programs; Android applications generally use Android database APIs or a separately configured JDBC driver where appropriate.</p>
+
+<h2 id="viva">Viva practice · 40 answered questions</h2>
+<details><summary>1. What is a String in Java?</summary><p><code>String</code> is a reference type representing an immutable sequence of UTF-16 code units.</p></details>
+<details><summary>2. What does immutable mean?</summary><p>Once created, the object's character sequence cannot be changed. Operations such as concatenation return a new String value.</p></details>
+<details><summary>3. What is a string literal?</summary><p>A quoted text value written directly in source code, such as <code>"Java"</code>. Literal strings can be interned by the runtime.</p></details>
+<details><summary>4. Why is new String("Java") often unnecessary?</summary><p>The literal already provides the needed immutable value. The constructor generally creates another String object without changing its contents.</p></details>
+<details><summary>5. What does length() return?</summary><p>It returns the number of UTF-16 code units in the string, which can differ from the number of Unicode code points or visible symbols.</p></details>
+<details><summary>6. What does charAt do?</summary><p>It returns the UTF-16 code unit at a zero-based index. The index must be within the String's length.</p></details>
+<details><summary>7. How can String characters be extracted?</summary><p>Use <code>charAt</code> for one code unit, <code>getChars</code> to copy a range into an array, or <code>toCharArray</code> to make a new char array.</p></details>
+<details><summary>8. How can supplementary Unicode characters be processed?</summary><p>Use code-point-aware operations such as <code>codePoints()</code> rather than assuming one char equals one character.</p></details>
+<details><summary>9. What does indexOf return when text is absent?</summary><p>It returns -1. Otherwise it returns the first matching index.</p></details>
+<details><summary>10. Compare indexOf and lastIndexOf.</summary><p><code>indexOf</code> searches for the first occurrence from the beginning; <code>lastIndexOf</code> finds the last occurrence.</p></details>
+<details><summary>11. How do you compare String contents?</summary><p>Use <code>equals</code> for exact content comparison. <code>==</code> compares whether two references identify the same object.</p></details>
+<details><summary>12. What does compareTo return?</summary><p>A negative, zero, or positive integer indicating lexicographic ordering. Code should test the sign, not depend on an exact nonzero value.</p></details>
+<details><summary>13. Does toUpperCase modify a String?</summary><p>No. It returns a String with converted text; the original object remains unchanged. Locale can affect case conversion.</p></details>
+<details><summary>14. What is StringBuffer?</summary><p>It is a mutable character sequence with synchronized methods. It supports edits such as append and insert without replacing the buffer reference.</p></details>
+<details><summary>15. StringBuffer versus String?</summary><p>String is immutable; StringBuffer is mutable and synchronized. For repeated single-thread text building, StringBuilder is usually the preferred unsynchronized alternative.</p></details>
+<details><summary>16. Is StringBuffer.equals content-based?</summary><p>No. StringBuffer implements Comparable but does not override equals for text equality. Convert to String or compare its content explicitly.</p></details>
+<details><summary>17. Name Java's wrapper classes.</summary><p>Byte, Short, Integer, Long, Float, Double, Character, and Boolean are wrappers for the eight primitive types.</p></details>
+<details><summary>18. What is autoboxing?</summary><p>It is the automatic conversion from a primitive value to its corresponding wrapper object, such as int to Integer.</p></details>
+<details><summary>19. What is unboxing?</summary><p>It extracts a primitive value from its wrapper object. Unboxing a null reference throws NullPointerException.</p></details>
+<details><summary>20. Difference between parseInt and valueOf?</summary><p><code>Integer.parseInt</code> returns an int primitive; <code>Integer.valueOf</code> returns an Integer wrapper.</p></details>
+<details><summary>21. What happens when Integer.parseInt receives invalid text?</summary><p>It throws <code>NumberFormatException</code>. Validate input or catch that exception when input is untrusted.</p></details>
+<details><summary>22. What is Runtime?</summary><p><code>Runtime</code> represents the running Java application environment and provides methods for querying or interacting with that environment.</p></details>
+<details><summary>23. How is the Runtime instance obtained?</summary><p>Call <code>Runtime.getRuntime()</code>, which returns the runtime object associated with the current Java application.</p></details>
+<details><summary>24. Does freeMemory report a guaranteed amount of available memory?</summary><p>No. It is an approximate snapshot of currently unused memory in the heap and can change as the runtime allocates or collects objects.</p></details>
+<details><summary>25. What is garbage collection?</summary><p>It reclaims heap storage occupied by objects that are no longer reachable. It is not deterministic and does not close external resources.</p></details>
+<details><summary>26. Can Java programs have memory leaks?</summary><p>Yes. Code can keep unnecessary references alive, preventing garbage collection even though the objects are no longer useful.</p></details>
+<details><summary>27. What is AWT?</summary><p>The Abstract Window Toolkit is Java's original desktop GUI API, with controls, containers, graphics, events, and layout support.</p></details>
+<details><summary>28. Name four AWT controls.</summary><p>Button, Label, TextField, and TextArea are examples. AWT also provides checkboxes, choices, lists, and other components.</p></details>
+<details><summary>29. What is a layout manager?</summary><p>It positions and sizes components in a container, adapting to changes such as window resizing or font metrics.</p></details>
+<details><summary>30. What does FlowLayout do?</summary><p>It arranges components in a row from left to right and wraps them into additional rows when space is limited.</p></details>
+<details><summary>31. What does BorderLayout do?</summary><p>It divides a container into north, south, east, west, and center regions. The center region receives the remaining space.</p></details>
+<details><summary>32. What is event delegation?</summary><p>A source component creates an event object and notifies registered listener objects that implement the appropriate callback interface.</p></details>
+<details><summary>33. What is an event listener?</summary><p>It is an object registered with an event source to receive a callback when an event occurs, such as a button action.</p></details>
+<details><summary>34. What is Swing?</summary><p>Swing is a richer Java desktop GUI toolkit with many mostly lightweight components and a pluggable look and feel. It builds on AWT infrastructure.</p></details>
+<details><summary>35. What is the Event Dispatch Thread?</summary><p>The EDT is the thread that processes Swing events and most Swing UI updates. Keeping its tasks short helps the interface remain responsive.</p></details>
+<details><summary>36. What is JDBC?</summary><p>Java Database Connectivity is a standard Java API of interfaces for connecting to databases and executing SQL through database-specific drivers.</p></details>
+<details><summary>37. What is a JDBC driver?</summary><p>It implements JDBC interfaces and translates application calls into a specific database protocol. The application must include a compatible driver.</p></details>
+<details><summary>38. What is PreparedStatement?</summary><p>It represents parameterized SQL with placeholders. Binding values avoids building SQL by concatenating untrusted input and reduces injection risks.</p></details>
+<details><summary>39. What does ResultSet do?</summary><p>It represents rows returned by a query. Its cursor starts before the first row; call <code>next()</code> to advance and test whether a row exists.</p></details>
+<details><summary>40. Why use try-with-resources in JDBC?</summary><p>It closes the ResultSet, statement, and connection reliably when the block ends, including when an SQL operation throws an exception.</p></details>
+
+<h2>References for further reading</h2><p class="small"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html">String API</a> · <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/StringBuffer.html">StringBuffer API</a> · <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.sql/java/sql/package-summary.html">JDBC API</a> · <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.desktop/javax/swing/package-summary.html">Swing API and threading policy</a> · <a href="https://docs.oracle.com/javase/tutorial/uiswing/concurrency/dispatch.html">Swing Event Dispatch Thread</a> · <a href="https://docs.oracle.com/javase/tutorial/uiswing/events/generalrules.html">Event listener guidance</a></p>
+</main></body></html>

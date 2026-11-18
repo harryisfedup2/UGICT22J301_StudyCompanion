@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Unit 2 · OOP Concepts</title>
+<style>:root{color-scheme:dark;--bg:#0b1020;--panel:#151d32;--panel2:#1c2942;--line:#2b3a57;--text:#f3f6ff;--muted:#c1cbe0;--accent:#9bb2ff;--green:#8be0b0;--gold:#ffd18b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.68 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:920px;margin:auto;padding:22px 19px 54px}h1{font-size:clamp(29px,7vw,42px);line-height:1.15;margin:9px 0 12px}h2{font-size:25px;line-height:1.25;margin:38px 0 12px;color:var(--accent)}h3{font-size:19px;margin:24px 0 7px;color:#dbe4ff}p{margin:9px 0;color:var(--muted)}li{margin:6px 0;color:var(--muted)}strong{color:#fff}a{color:#a9c1ff}.tag{color:var(--accent);font-size:12px;font-weight:800;letter-spacing:.12em}.lead,.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:12px 0}.lead{border-left:4px solid var(--accent)}.callout{border-left:4px solid var(--gold);background:#251f1a;padding:12px 15px;border-radius:9px;margin:14px 0;color:#f0dfc4}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}.grid .card{margin:0}.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:12px 0}table{border-collapse:collapse;width:100%;min-width:570px;background:var(--panel);font-size:14px}th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}th{color:var(--accent);background:var(--panel2)}td{color:var(--muted)}code{color:#b8f0cb;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}pre{overflow-x:auto;background:#080d18;border:1px solid var(--line);border-radius:12px;padding:15px;color:#e4ecff;font:13px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre}.toc a{display:inline-block;margin:4px 8px 4px 0;padding:5px 9px;border:1px solid var(--line);border-radius:20px;text-decoration:none;font-size:13px}details{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:9px 0;padding:11px 14px}summary{cursor:pointer;color:#eef2ff;font-weight:700}details p{margin:8px 2px 1px}.small{font-size:13px}@media(max-width:520px){main{padding:17px 14px 42px}body{font-size:15px}pre{font-size:12px;padding:12px}}</style></head><body><main>
+<div class="tag">UGICT22J301 · UNDERSTANDING OOPs THROUGH JAVA · 15 HOURS</div><h1>Unit 2: OOP Concepts</h1>
+<p class="lead">Unit 2 moves from values to structured programs. Arrays keep related values together; control statements choose what happens next; classes define objects; and inheritance, access rules, packages, and dynamic dispatch help large programs stay understandable. Imagine a campus administration system: the class is the form and rules, each object is one student's record, and access control prevents an unrelated screen from rewriting official marks.</p>
+<nav class="toc"><a href="#arrays">Arrays &amp; I/O</a><a href="#control">Control flow</a><a href="#classes">Classes &amp; objects</a><a href="#inheritance">Inheritance &amp; dispatch</a><a href="#packages">Packages</a><a href="#viva">40 viva answers</a></nav>
+
+<h2>A short design history: what Java adopted and shaped</h2>
+<p>Classes, objects, inheritance, and exception handling did not begin with Java; they developed across earlier programming languages and software research. Java's historical contribution was to bring a carefully specified, class-based object model together with portability goals, managed memory, access control, and a standard library in one general-purpose platform. This helped developers move from small programs to reusable components that could be distributed and run on compatible virtual machines.</p>
+<p>The original Java Language Specification describes Java as class-based and object-oriented, and explains that Oak was designed for embedded consumer electronics before being retargeted to the Internet. Java chose single inheritance for classes, with interfaces as a separate way to share contracts. Later language evolution added nested type declarations and richer library support while emphasizing compatibility with existing code. These choices explain why the syllabus treats a class, access boundary, superclass, and package as related tools rather than isolated keywords.</p>
+
+<h2 id="arrays">Arrays, input, output, and error streams</h2>
+<p>An <strong>array</strong> is a fixed-length object whose elements all have the same component type. Its index begins at zero, and its length is available through the field <code>length</code>. An array variable is a reference, so it can be <code>null</code>; newly allocated numeric elements start at zero, booleans at false, and reference elements at null.</p>
+<pre><code>int[] marks = {82, 91, 76};        // one-dimensional array
+int[][] seats = {{1, 2}, {3, 4}}; // two-dimensional array-of-arrays
+int[][] jagged = new int[2][];     // rows are separately allocated
+jagged[0] = new int[3];
+jagged[1] = new int[1];
+System.out.println(marks.length);  // 3</code></pre>
+<p>Java's two-dimensional arrays are arrays whose elements are references to row arrays. Rows can have different lengths (a ragged array), so check <code>matrix[row].length</code> for the selected row. Arrays are appropriate for known-size collections and efficient indexed access; use collection classes when the number of elements changes dynamically.</p>
+<h3>Console I/O</h3>
+<p><code>System.out</code> is the usual output stream; <code>System.err</code> is a separate conventional stream for diagnostics. <code>Scanner</code> can parse human input but has token and locale rules; <code>BufferedReader</code> reads lines efficiently. Input can fail or be malformed, so production code validates it and handles exceptions.</p>
+<pre><code>import java.util.Scanner;
+
+class ReadAge {
+    public static void main(String[] args) {
+        try (Scanner input = new Scanner(System.in)) {
+            System.out.print("Age: ");
+            if (input.hasNextInt()) {
+                int age = input.nextInt();
+                System.out.println("Next year: " + (age + 1));
+            } else {
+                System.err.println("Please enter a whole number.");
+            }
+        }
+    }
+}</code></pre>
+<p><strong>Line by line:</strong> the import makes the library class available by its short name. <code>main</code> is the program entry point. The try-with-resources statement arranges for the scanner to close. The prompt is printed, <code>hasNextInt</code> checks the next token before parsing, and the two branches print either a computed value or a clear diagnostic. A reusable program should consider whether it owns standard input before closing a scanner around it.</p>
+<p><strong>Expected interaction:</strong> entering <code>20</code> prints <code>Next year: 21</code>; entering <code>twenty</code> prints <code>Please enter a whole number.</code> to the error stream.</p>
+
+<h2 id="control">Control statements, loops, and typecasting</h2>
+<ul><li><code>if / else</code> selects among branches using a boolean expression. Use braces even for one-statement branches to make edits safer.</li><li><code>switch</code> selects among cases. Traditional switch statements can fall through without <code>break</code>; arrow-style switch rules avoid that behavior in supported Java versions.</li><li><code>for</code> is useful when initialization, condition, and update form a counted loop; enhanced <code>for</code> walks each array or iterable element.</li><li><code>while</code> checks a condition before each iteration; <code>do-while</code> checks after the body and therefore runs at least once.</li><li><code>break</code> exits a loop or switch; <code>continue</code> skips to the next iteration. Labeled forms exist but can make flow harder to follow.</li><li><code>return</code> exits a method and may provide its result.</li></ul>
+<p>Type casting converts a value or reference to another type under defined rules. Primitive narrowing can lose data; reference casts can fail at runtime if the object is not compatible. Prefer <code>instanceof</code> when a reference cast is not guaranteed by the program's design.</p>
+
+<h2 id="classes">Classes, objects, constructors, and member kinds</h2>
+<p>A class declares fields, methods, constructors, and nested types. An object is one instance with its own instance fields. <code>new</code> allocates an object and invokes a constructor. A constructor has the class name, has no return type, and establishes the object's valid starting state.</p>
+<p><strong>Constructor overloading</strong> means declaring constructors with different parameter lists. A no-argument constructor is generated only if a class declares no constructors. <code>this(...)</code> invokes another constructor in the same class and must be its first statement; <code>super(...)</code> invokes a superclass constructor and must also be first. If neither is written, Java inserts <code>super()</code> when the superclass has an accessible no-argument constructor.</p>
+<p><strong>Method overloading</strong> uses the same method name with different parameter lists. The compiler chooses an overload using compile-time argument types; changing only a return type does not create a valid overload. Overloading is distinct from overriding.</p>
+<div class="tablewrap"><table><thead><tr><th>Member kind</th><th>Belongs to</th><th>Typical use</th></tr></thead><tbody><tr><td>Instance field or method</td><td>Each object / its class definition</td><td>Per-student name, grade, or behavior that uses object state</td></tr><tr><td><code>static</code> field or method</td><td>The class, shared across instances</td><td>Constants, counters, utility methods that do not need a particular object</td></tr><tr><td><code>final</code> variable</td><td>One assigned value or reference</td><td>Prevent reassignment; a final reference can still point to a mutable object</td></tr><tr><td><code>final</code> method</td><td>Class hierarchy</td><td>Prevent subclasses from overriding that method</td></tr><tr><td><code>final</code> class</td><td>Type hierarchy</td><td>Prevent subclassing of that class</td></tr></tbody></table></div>
+<p>A <code>static</code> method has no <code>this</code> reference and cannot directly use instance fields. A blank <code>final</code> field can be assigned by a constructor or initializer, subject to definite-assignment rules. <code>static final</code> constants are commonly written in uppercase with underscores.</p>
+
+<h2 id="inheritance">Access, inheritance, abstract classes, and dynamic dispatch</h2>
+<div class="tablewrap"><table><thead><tr><th>Modifier</th><th>Same class</th><th>Same package</th><th>Subclass in another package</th><th>Unrelated other package</th></tr></thead><tbody><tr><td><code>private</code></td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr><tr><td>(no modifier), package-private</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td></tr><tr><td><code>protected</code></td><td>Yes</td><td>Yes</td><td>Yes, through subclass access rules</td><td>No</td></tr><tr><td><code>public</code></td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes, if the declaring type is accessible</td></tr></tbody></table></div>
+<p><strong>Inheritance</strong> lets a subclass extend one superclass using <code>extends</code>. Java classes support single inheritance; multilevel and hierarchical arrangements are possible. There is no multiple inheritance of classes, which avoids ambiguous inherited implementations; multiple interfaces can express multiple contracts. A subclass constructor uses <code>super</code> to initialize the superclass portion before its own state.</p>
+<p><strong>Overriding</strong> replaces an inherited instance method with a compatible implementation. Use <code>@Override</code> so the compiler catches spelling/signature mistakes. A static method is hidden, not overridden; private methods are not inherited as overridable methods; constructors are never overridden. The runtime object's class chooses an overridden method during <strong>dynamic method dispatch</strong>, even if the variable is declared as a superclass type.</p>
+<p>An <strong>abstract class</strong> cannot be instantiated directly and can combine state, implemented methods, and abstract methods without bodies. A concrete subclass must implement inherited abstract methods. Abstract classes are useful when related types share real state or partial behavior. The root class <code>Object</code> supplies common methods such as <code>toString</code>, <code>equals</code>, <code>hashCode</code>, and monitor methods; classes inherit from it directly or indirectly unless they are the special root declaration itself.</p>
+<h3>Nested and inner classes</h3>
+<p>A nested class is declared inside another class. A <strong>static nested class</strong> does not need an enclosing object; a non-static member class (often called an <strong>inner class</strong>) is associated with an instance of its enclosing class. Local and anonymous classes can be declared inside methods or expressions. They help group implementation details near the code that uses them, but over-nesting can make a design harder to navigate.</p>
+<h3>Complete example: constructors, array, override, dispatch, and nested type</h3>
+<pre><code>class CourseMember {
+    private final String name;
+    static int count = 0;
+
+    CourseMember(String name) {
+        this.name = name;
+        count++;
+    }
+
+    void introduce() {
+        System.out.println("Member: " + name);
+    }
+}
+
+class Student extends CourseMember {
+    private final int[] marks;
+
+    Student(String name, int[] marks) {
+        super(name);
+        this.marks = marks.clone();
+    }
+
+    @Override
+    void introduce() {
+        int total = 0;
+        for (int mark : marks) total += mark;
+        System.out.println("Student total: " + total);
+    }
+}
+
+public class Unit2Example {
+    static class Badge {
+        final String label;
+        Badge(String label) { this.label = label; }
+    }
+
+    public static void main(String[] args) {
+        CourseMember person = new Student("Mira", new int[]{80, 90});
+        person.introduce();
+        System.out.println("Created: " + CourseMember.count);
+        Badge badge = new Badge("JAVA");
+        System.out.println("Badge: " + badge.label);
+    }
+}</code></pre>
+<p><strong>Line by line:</strong> <code>CourseMember</code> defines a general type. Its private final name is initialized by the constructor; the static counter is shared by all members. The constructor's <code>this.name</code> distinguishes the field from its parameter. <code>Student extends CourseMember</code> specializes the member and adds an array. Its constructor calls <code>super(name)</code> first, then clones the input array so a caller cannot change the stored marks through the original array reference. <code>@Override</code> marks a replacement implementation. The enhanced for-loop totals each mark. <code>person</code> is declared as the parent type but refers to a Student, so runtime dispatch calls Student's <code>introduce</code>. The static nested <code>Badge</code> type groups a small helper with the example class.</p>
+<p><strong>Expected output:</strong><br><code>Student total: 170</code><br><code>Created: 1</code><br><code>Badge: JAVA</code></p>
+<h3>Abstract class syntax</h3>
+<pre><code>abstract class Shape {
+    abstract double area();
+    void describe() { System.out.println("A shape"); }
+}
+class Circle extends Shape {
+    private final double radius;
+    Circle(double radius) { this.radius = radius; }
+    @Override double area() { return Math.PI * radius * radius; }
+}</code></pre>
+<p><code>Shape</code> defines a required operation plus reusable behavior. <code>Circle</code> provides the missing formula; callers can use a <code>Shape</code> reference for different concrete shapes.</p>
+
+<h2 id="packages">Packages, access protection, and imports</h2>
+<p>A package groups related types, provides a namespace, and participates in access control. A source file's optional <code>package</code> declaration comes before imports and type declarations. The directory structure convention mirrors the package name, for example <code>edu.example.course</code> maps to folders <code>edu/example/course</code>. Build tools and the class path/module path tell the compiler and runtime where packages are found.</p>
+<pre><code>package edu.example.course;
+
+import java.util.Arrays;
+
+public class Roster {
+    public static void main(String[] args) {
+        System.out.println(Arrays.toString(new String[]{"Mira", "Asha"}));
+    }
+}</code></pre>
+<p>The <code>import</code> declaration lets code use a type's simple name; it does not copy code or load a package on its own. <code>java.lang</code> is imported implicitly. A wildcard import brings accessible types from one package into scope, not its subpackages. Public top-level types are normally placed in a correspondingly named source file. Package-private types are visible only in their package.</p>
+
+<h2>Common errors, uses, and design choices</h2>
+<ul><li>Using an array index outside <code>0</code> through <code>length - 1</code> causes <code>ArrayIndexOutOfBoundsException</code>.</li><li>Confusing <code>array.length</code> with a method call; <code>String</code> uses <code>length()</code>, while arrays use a field.</li><li>Comparing objects with <code>==</code> when content equality is intended.</li><li>Forgetting that a constructor's first statement must be <code>this(...)</code> or <code>super(...)</code> when explicitly chaining.</li><li>Assuming every class has a generated no-argument constructor after declaring another constructor.</li><li>Trying to override a static method, reduce visibility, or change the return type incompatibly.</li><li>Thinking a <code>final</code> object reference makes the referenced object's fields immutable.</li><li>Using <code>protected</code> as a general-purpose “public to subclasses” rule without considering package access and cross-package subclass rules.</li><li>Placing an <code>import</code> before the package declaration or expecting a wildcard import to include subpackages.</li></ul>
+<p>Arrays, classes, and packages are useful wherever data has stable structure and behavior: student records, inventory items, drawing shapes, transport systems, or reusable library APIs. Prefer small cohesive classes, private state, clear method contracts, and composition where inheritance does not represent a true subtype.</p>
+
+<h2 id="viva">Viva practice · 40 answered questions</h2>
+<details><summary>1. What is an array?</summary><p>An array is a fixed-length object whose elements share one component type. Its elements are reached by zero-based indexes.</p></details>
+<details><summary>2. How is an array length accessed?</summary><p>Use the field <code>array.length</code>, without parentheses. The length is fixed after the array is created.</p></details>
+<details><summary>3. What is a two-dimensional array in Java?</summary><p>It is an array whose elements are references to row arrays. Rows may have different lengths, so Java arrays can be ragged.</p></details>
+<details><summary>4. What is the default value of a new int array element?</summary><p>Zero. Other numeric primitive elements also default to zero, boolean elements to false, and reference elements to null.</p></details>
+<details><summary>5. What happens when an array index is invalid?</summary><p>The JVM throws <code>ArrayIndexOutOfBoundsException</code>. Valid indexes start at zero and end at <code>length - 1</code>.</p></details>
+<details><summary>6. What is the difference between System.out and System.err?</summary><p>Both are standard output streams, but <code>System.err</code> is conventionally used for diagnostics. A shell or IDE may display or redirect them separately.</p></details>
+<details><summary>7. What is Scanner used for?</summary><p><code>Scanner</code> tokenizes and parses input from sources such as the console. Check the next token or handle parsing exceptions when the input may be invalid.</p></details>
+<details><summary>8. What does try-with-resources do?</summary><p>It closes each declared resource automatically when control leaves the block, including when an exception occurs, provided the resource implements <code>AutoCloseable</code>.</p></details>
+<details><summary>9. What is an if statement?</summary><p>It conditionally executes a branch when a boolean expression is true. An optional <code>else</code> handles the false case.</p></details>
+<details><summary>10. What is a switch statement?</summary><p>It selects among alternatives based on a selector value. Traditional cases may fall through; arrow-style switch rules do not fall through.</p></details>
+<details><summary>11. Compare while and do-while.</summary><p><code>while</code> tests before running its body and may run zero times. <code>do-while</code> tests after the body and runs at least once.</p></details>
+<details><summary>12. What does break do?</summary><p>It exits the nearest enclosing loop or switch statement. A labeled break can exit an enclosing labeled statement.</p></details>
+<details><summary>13. What does continue do?</summary><p>It skips the remaining work in the current loop iteration and proceeds to the next iteration, subject to the loop's update and condition.</p></details>
+<details><summary>14. What is typecasting?</summary><p>Typecasting converts an expression to a compatible type. Primitive narrowing can lose information; an invalid reference cast can throw <code>ClassCastException</code>.</p></details>
+<details><summary>15. What is a class?</summary><p>A class declares a type's state and behavior through fields, methods, constructors, and nested declarations. It describes objects that can be instantiated.</p></details>
+<details><summary>16. What is an object?</summary><p>An object is a runtime instance with identity, state, and behavior. Each instance normally has its own instance field values.</p></details>
+<details><summary>17. What is a constructor?</summary><p>A constructor initializes a new object. It has the class name and no return type, not even <code>void</code>.</p></details>
+<details><summary>18. When is a default constructor generated?</summary><p>The compiler provides a no-argument constructor only when the class declares no constructor. Once any constructor is written, the compiler does not add that default.</p></details>
+<details><summary>19. What is constructor overloading?</summary><p>It is declaring multiple constructors with different parameter lists. Each can provide a convenient way to create a valid object.</p></details>
+<details><summary>20. What is the purpose of this?</summary><p><code>this</code> refers to the current object inside an instance context. It can disambiguate a field from a parameter or invoke another constructor with <code>this(...)</code>.</p></details>
+<details><summary>21. What is the purpose of super?</summary><p><code>super</code> refers to the superclass portion of the current object. It can invoke a superclass constructor or access an inherited implementation.</p></details>
+<details><summary>22. What is method overloading?</summary><p>Overloading declares the same method name with different parameter lists. The compiler resolves which overload applies; return type alone cannot distinguish overloads.</p></details>
+<details><summary>23. What is method overriding?</summary><p>Overriding supplies a compatible implementation of an inherited instance method in a subclass. The runtime object's type determines which implementation runs.</p></details>
+<details><summary>24. Why use @Override?</summary><p>It asks the compiler to verify that the method really overrides or implements a method. It catches signature mistakes early.</p></details>
+<details><summary>25. What is dynamic method dispatch?</summary><p>It is runtime selection of an overridden instance method based on the actual object's class, even when the reference is declared as a superclass type.</p></details>
+<details><summary>26. What is single inheritance?</summary><p>A Java class directly extends at most one other class. It may still implement multiple interfaces.</p></details>
+<details><summary>27. Define multilevel inheritance.</summary><p>It is a chain of classes where one subclass extends another subclass, such as <code>Vehicle → Bus → SchoolBus</code>.</p></details>
+<details><summary>28. Define hierarchical inheritance.</summary><p>It occurs when multiple subclasses extend the same superclass, such as <code>Bus</code> and <code>Bicycle</code> extending <code>Vehicle</code>.</p></details>
+<details><summary>29. What is an abstract class?</summary><p>It is a class that cannot be instantiated directly and may declare abstract methods without bodies. Concrete subclasses complete the required behavior.</p></details>
+<details><summary>30. Can an abstract class have concrete methods?</summary><p>Yes. It can combine implemented methods and fields with abstract methods that subclasses must implement.</p></details>
+<details><summary>31. What is Object in Java?</summary><p><code>java.lang.Object</code> is the root superclass of ordinary Java classes. It defines common methods such as <code>equals</code>, <code>hashCode</code>, and <code>toString</code>.</p></details>
+<details><summary>32. What does static mean for a field?</summary><p>The field is associated with the class rather than a separate copy per object. All instances access the same class-level field.</p></details>
+<details><summary>33. What does final mean for a reference?</summary><p>The reference cannot be reassigned after initialization. The object it refers to may still be mutable unless its design also prevents changes.</p></details>
+<details><summary>34. What does a final class do?</summary><p>A final class cannot be subclassed. This can preserve design invariants or support immutable class designs.</p></details>
+<details><summary>35. Name Java's access levels.</summary><p><code>private</code>, package-private (no modifier), <code>protected</code>, and <code>public</code>. Their visibility differs by class, package, and subclass relationship.</p></details>
+<details><summary>36. What is package-private access?</summary><p>With no access modifier, a member or top-level type is visible to code in the same package but not generally to code in other packages.</p></details>
+<details><summary>37. What is a package?</summary><p>A package groups related types, creates a namespace, and affects access control. Package names conventionally map to directory paths.</p></details>
+<details><summary>38. What does import do?</summary><p>An import lets source refer to an accessible type by its simple name. It does not copy source code or automatically import subpackages.</p></details>
+<details><summary>39. What is an inner class?</summary><p>It is a non-static member class associated with an enclosing object. A static nested class is nested too but does not require an enclosing instance.</p></details>
+<details><summary>40. When should inheritance be used?</summary><p>Use it when a subtype truly satisfies the superclass contract and can safely be used wherever the parent is expected. For a “has-a” relationship, composition is often clearer.</p></details>
+
+<h2>References for further reading</h2><p class="small"><a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-8.html">Java Language Specification: Classes</a> · <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-6.html">Names and Access Control</a> · <a href="https://docs.oracle.com/javase/specs/jls/se6/html/j.preface2.html">Java Language Specification: evolution and compatibility history</a> · <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html">Object API</a> · <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/Scanner.html">Scanner API</a></p>
+</main></body></html>
