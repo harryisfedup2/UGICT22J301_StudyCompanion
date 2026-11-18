@@ -1,0 +1,91 @@
+Java Study Companion
+
+A simple, student-focused Android app for learning Java and Object-Oriented Programming
+
+Course: UGICT22J301 – Understanding OOPs through Java
+Platform: Android
+Project type: Educational application
+Developer: Haris Shameem
+Repository: "Java Study Companion on GitHub" (https://github.com/harryisfedup2/UGICT22J301_StudyCompanion)
+
+---
+
+About the Project
+
+Java Study Companion is an Android learning application developed to make studying Java and Object-Oriented Programming more accessible, organised and convenient for students.
+
+The aim of this project is to bring important theory concepts and practical Java programs together in one place, with a clean, minimal and student-friendly interface.
+
+The application is designed as a study companion for students following the UGICT22J301 – Understanding OOPs through Java course.
+
+Key Features
+
+- Four Theory Units: Organised learning material covering the four units of the course.
+- 30 Java Practical Programs: A dedicated practical section containing 30 Java programs.
+- Concept-Based Learning: Explanations and definitions to support understanding of important topics and subtopics.
+- Code and Expected Output: Practical examples presented with their Java source code and expected output.
+- Minimalist Interface: A clean, focused design intended to make reading and navigation comfortable.
+- Student-Friendly Access: Study material and practical examples available directly on an Android device.
+
+Screenshots
+
+Add screenshots of the home screen, theory units and practical lab here.
+
+Download and Installation
+
+Option 1 – Download the Android App
+
+Download the APK from the repository's Releases section:
+
+"Java Study Companion – Releases" (https://github.com/harryisfedup2/UGICT22J301_StudyCompanion/releases)
+
+1. Download the latest APK.
+2. Open the downloaded APK on your Android device.
+3. If Android asks for permission, allow installation from that source.
+4. Complete the installation and open Java Study Companion.
+
+Option 2 – Download the Source Code
+
+Visit the repository:
+
+"View Java Study Companion Source Code" (https://github.com/harryisfedup2/UGICT22J301_StudyCompanion)
+
+Select Code → Download ZIP to download the project.
+
+You can open the extracted project in Android Studio to explore the code, learn how the application is structured, make modifications and build your own version.
+
+Technology
+
+- Java
+- Android SDK
+- Android Studio
+- Gradle
+- XML-based Android layouts
+
+Purpose
+
+This project was created with a simple goal: to make Java learning more organised and practical for students.
+
+It brings theoretical explanations and practical programming examples together so that students can revise concepts, explore code and understand expected outputs in one application.
+
+Contributions and Feedback
+
+Suggestions, corrections and constructive feedback are welcome.
+
+If you find an issue or have an idea that could improve the application, you can use the GitHub repository to share your feedback.
+
+Please retain the original author and licence notices when reusing or modifying the source code.
+
+Developer
+
+Haris shameem
+
+Contact details and social links are also provided inside the application.
+
+Licence
+
+This project is licensed under the MIT License. See the "LICENSE" (LICENSE) file for details.
+
+---
+
+Built as a student learning project, with the intention of making Java study simpler, more accessible and more engaging.
